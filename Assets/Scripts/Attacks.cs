@@ -28,9 +28,13 @@ public class Attacks : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackBox.position, basic_attack_Range, enemies);
         //Deal damage to those enemies
         foreach (Collider2D enemy in hitEnemies)
-        {
-            enemy.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, 10)); 
+        {   
+            float[] AttackDetails = {10, transform.position.x};
+            enemy.transform.parent.SendMessage("Damage", AttackDetails);
+            enemy.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, 25)); 
+            
         }
+
 
     }
     void OnDrawGizmosSelected()
