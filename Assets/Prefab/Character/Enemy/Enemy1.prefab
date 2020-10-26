@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1865657611448992744}
   - component: {fileID: 1865657611448992727}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1865657611448992745}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.19, y: 3.91, z: 0}
+  m_LocalPosition: {x: 0.19, y: 3.91, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1865657611449207681}
@@ -57,7 +57,8 @@ MonoBehaviour:
   KnockbackSpeed: {x: 10, y: 5}
   hitParticle: {fileID: 6240072112886026631, guid: c1387b46bcb6250418f7ea8c3feb3533,
     type: 3}
-  deathChunkParticle: {fileID: 0}
+  deathChunkParticle: {fileID: 1811562491775988400, guid: 91ba8042de61e7348b1ed45d79253667,
+    type: 3}
   deathBloodParticle: {fileID: 153118182228173420, guid: 4a122dcc68153794295f6953dd91521e,
     type: 3}
 --- !u!1 &1865657611449207682
@@ -73,7 +74,7 @@ GameObject:
   - component: {fileID: 1865657611449207694}
   - component: {fileID: 1865657611449207695}
   - component: {fileID: 1865657611449207680}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Alive
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -222,7 +223,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1865657613212865854}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -252,7 +253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1865657613515700195}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

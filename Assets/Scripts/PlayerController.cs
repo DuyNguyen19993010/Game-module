@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
         }
         //check facing direction
         checkFacingDirection();
+
     }
     void FixedUpdate()
     {

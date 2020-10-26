@@ -951,7 +951,7 @@ GameObject:
   - component: {fileID: 1136818387}
   - component: {fileID: 1136818388}
   - component: {fileID: 1136818389}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: HeroKnight_1
   m_TagString: player
   m_Icon: {fileID: 0}
@@ -1390,7 +1390,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1380065872}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: AttackBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1427,7 +1427,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1585324439}
   - component: {fileID: 1585324440}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
