@@ -41,11 +41,23 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: background
-    uniqueID: 2375352517
-    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: background 1
+    uniqueID: 4075595179
+    locked: 0
+  - name: background 2
+    uniqueID: 477825917
+    locked: 0
+  - name: background 3
+    uniqueID: 4056382891
+    locked: 0
+  - name: background 4
+    uniqueID: 549976305
+    locked: 0
+  - name: Npc
+    uniqueID: 908254789
     locked: 0
   - name: currentground
     uniqueID: 1642786399
@@ -53,9 +65,6 @@ TagManager:
   - name: Non npc
     uniqueID: 616057313
     locked: 0
-  - name: Npc
-    uniqueID: 908254789
-    locked: 0
-  - name: foreground
+  - name: ' Foreground'
     uniqueID: 2611032807
     locked: 0
