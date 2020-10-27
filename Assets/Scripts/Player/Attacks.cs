@@ -42,6 +42,7 @@ public class Attacks : MonoBehaviour
         animator.SetTrigger("light_attack");
         //Detect enemies in range of the attack
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackBox.position, basic_attack_Range, enemies);
+        //Delay player attack and force user to stop moving while the attack is happening
         yield return new WaitForSeconds(lightAttackTimeToWait);
         //Deal damage to those enemies
         foreach (Collider2D enemy in hitEnemies)
