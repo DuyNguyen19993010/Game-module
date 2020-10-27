@@ -33,8 +33,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         extraJumpsValue = 3;
-        speed = 10.0f;
-        jumpHeight = 10.0f;
+        speed = 3.0f;
+        jumpHeight = 5.0f;
         facingRight = true;
         speedSlowOffset = 0.4f;
         rb = GetComponent<Rigidbody2D>();
