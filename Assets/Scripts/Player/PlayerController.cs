@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 
 {
     //Player movement and rigidbody 2d
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     //----------------------------Checking speed and jump height
     public float speed;
     public float speedSlowOffset;
@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     string buttonPressed;
     //--------------------------------Animation
     public Animator animator;
+    public bool isMoving;
 
 
 
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
         jumpHeight = 5.0f;
         facingRight = true;
         speedSlowOffset = 0.4f;
+        isMoving = true;
         rb = GetComponent<Rigidbody2D>();
 
     }
@@ -64,7 +66,10 @@ public class PlayerController : MonoBehaviour
         //Check if player is grounded
         checkGround();
         //Move the player
-        movePlayer();
+        if (isMoving)
+        {
+            movePlayer();
+        }
     }
     void checkGround()
     {
@@ -156,6 +161,10 @@ public class PlayerController : MonoBehaviour
 
         }
 
+    }
+    public void setMoving(bool value)
+    {
+        isMoving = value;
     }
     void slowDown()
     {
