@@ -10,6 +10,8 @@ TagManager:
   - Camera 1
   - Camera 2
   - SceneTransition
+  - SceneTransitionSumarize
+  - Camera 3
   layers:
   - Default
   - TransparentFX

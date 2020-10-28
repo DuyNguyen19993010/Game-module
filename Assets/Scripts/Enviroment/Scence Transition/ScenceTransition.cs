@@ -18,6 +18,8 @@ public class ScenceTransition : MonoBehaviour
 
     void Start()
     {
+        Cams = GameObject.FindGameObjectsWithTag("SceneTransitionSumarize")[0].GetComponent<CameraSumarize>().Cams;
+
         timeToWait = 2.0f;
     }
 
@@ -28,12 +30,25 @@ public class ScenceTransition : MonoBehaviour
             Player = GameObject.FindGameObjectsWithTag("player");
             // Debug.Log(toDisable.Length);
             // Debug.Log(toEnable.Length);
+
             other.transform.position = destination.position;
             Debug.Log("--------------------------------------------------------------------------");
             StartCoroutine(stopPlayer());
-            Debug.Log(Cams);
-            Cams[fromCam - 1].SetActive(false);
-            Cams[toCam - 1].SetActive(true);
+            Debug.Log("This is level " + gameObject.tag);
+            for (int i = 0; i < Cams.Count; i++)
+            {
+                if (Cams[i].tag != ("Camera " + toCam))
+                {
+                    Debug.Log("Disabled " + Cams[i].tag);
+                    Cams[i].SetActive(false);
+                }
+                if (Cams[i].tag == ("Camera " + toCam))
+                {
+                    Debug.Log("Changed to" + Cams[i].tag);
+                    Cams[i].SetActive(true);
+                }
+
+            }
             // for (int i = 0; i < toDisable.Length; i++)
             // {
             //     Debug.Log("fromCam set");
@@ -57,8 +72,5 @@ public class ScenceTransition : MonoBehaviour
         Player[0].GetComponent<PlayerController>().SendMessage("setMoving", true);
 
     }
-    public void addCam(GameObject cam)
-    {
-        Cams.Add(cam);
-    }
+
 }

@@ -10,12 +10,12 @@ public class CamInitialization : MonoBehaviour
     void Awake()
     {
 
-        st = GameObject.FindGameObjectsWithTag("SceneTransition");
+        st = GameObject.FindGameObjectsWithTag("SceneTransitionSumarize");
         Debug.Log("st is:" + st.Length);
         for (int i = 0; i < st.Length; i++)
         {
-            Debug.Log("Cam added");
-            st[i].GetComponent<ScenceTransition>().SendMessage("addCam", gameObject);
+            Debug.Log(gameObject.tag + " added");
+            st[i].GetComponent<CameraSumarize>().SendMessage("addCam", gameObject);
         }
         gameObject.SetActive(isDisplayed);
 
