@@ -28,6 +28,7 @@ public class Attacks : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.K) && gameObject.GetComponent<PlayerController>().isGrounded && gameObject.GetComponent<PlayerController>().rb.velocity.x == 0.0f)
             {
                 gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
+                animator.SetFloat("Speed", 0);
                 StartCoroutine(BasicAttack());
                 nextAttackTime = Time.time + lightAttackTimeToWait / attackTime;
             }
@@ -53,6 +54,7 @@ public class Attacks : MonoBehaviour
 
         }
         gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
+
 
 
     }
