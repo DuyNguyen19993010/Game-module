@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("isGrounded", false);
         }
+        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+
         //check facing direction
         checkFacingDirection();
 
@@ -134,17 +136,17 @@ public class PlayerController : MonoBehaviour
         if (buttonPressed == "D")
         {
             rb.velocity = (new Vector2(speed, rb.velocity.y));
-            animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+
         }
         else if (buttonPressed == "A")
         {
             rb.velocity = (new Vector2(-speed, rb.velocity.y));
-            animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+
         }
         else
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
-            animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+
         }
 
 

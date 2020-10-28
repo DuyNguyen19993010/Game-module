@@ -56,11 +56,4 @@ public class Attacks : MonoBehaviour
 
 
     }
-    void OnDrawGizmosSelected()
-    {
-        if (attackBox == null)
-        {
-            Gizmos.DrawWireSphere(attackBox.position, basic_attack_Range);
-        }
-    }
 }
