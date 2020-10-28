@@ -23,6 +23,7 @@ public class ScenceTransition : MonoBehaviour
         if (other.tag == "player")
         {
             Player = GameObject.FindGameObjectsWithTag("player");
+<<<<<<< HEAD
             toDisable = GameObject.FindGameObjectsWithTag(fromCam);
             toEnable = GameObject.FindGameObjectsWithTag(fromCam);
             other.transform.position = destination.position;
@@ -35,6 +36,26 @@ public class ScenceTransition : MonoBehaviour
                 toEnable[i].SetActive(true);
             }
             StartCoroutine(stopPlayer());
+=======
+            // Debug.Log(toDisable.Length);
+            // Debug.Log(toEnable.Length);
+            other.transform.position = destination.position;
+            Debug.Log("--------------------------------------------------------------------------");
+            StartCoroutine(stopPlayer());
+            Debug.Log(Cams);
+            Cams[fromCam - 1].SetActive(false);
+            Cams[toCam - 1].SetActive(true);
+            // for (int i = 0; i < toDisable.Length; i++)
+            // {
+            //     Debug.Log("fromCam set");
+            //     toDisable[i].GetComponent<CamInitialization>().SendMessage("setDisplay", false);
+            // }
+            // for (int i = 0; i < toEnable.Length; i++)
+            // {
+            //     Debug.Log("toCam set");
+            //     toEnable[i].GetComponent<CamInitialization>().SendMessage("setDisplay", true);
+            // }
+>>>>>>> parent of 4445036... Camera now works flawlessly
 
         }
     }
@@ -47,4 +68,11 @@ public class ScenceTransition : MonoBehaviour
         Player[0].GetComponent<PlayerController>().SendMessage("setMoving", true);
 
     }
+<<<<<<< HEAD
+=======
+    public void addCam(GameObject cam)
+    {
+        Cams.Add(cam);
+    }
+>>>>>>> parent of 4445036... Camera now works flawlessly
 }

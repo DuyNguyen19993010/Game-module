@@ -9,6 +9,10 @@ TagManager:
   - Enemy
   - Camera 1
   - Camera 2
+<<<<<<< HEAD
+=======
+  - SceneTransition
+>>>>>>> parent of 4445036... Camera now works flawlessly
   layers:
   - Default
   - TransparentFX
