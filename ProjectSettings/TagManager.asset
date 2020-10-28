@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Camera 1
   - Camera 2
+  - SceneTransition
   layers:
   - Default
   - TransparentFX

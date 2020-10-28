@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using System.Collections.Generic;
 public class ScenceTransition : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -10,9 +10,12 @@ public class ScenceTransition : MonoBehaviour
     GameObject[] toDisable;
     GameObject[] toEnable;
     GameObject[] Player;
-    public string fromCam;
-    public string toCam;
+    public int fromCam;
+    public int toCam;
     public float timeToWait;
+    public List<GameObject> Cams;
+
+
     void Start()
     {
         timeToWait = 2.0f;
@@ -23,21 +26,28 @@ public class ScenceTransition : MonoBehaviour
         if (other.tag == "player")
         {
             Player = GameObject.FindGameObjectsWithTag("player");
-            toDisable = GameObject.FindGameObjectsWithTag(fromCam);
-            toEnable = GameObject.FindGameObjectsWithTag(fromCam);
+            // Debug.Log(toDisable.Length);
+            // Debug.Log(toEnable.Length);
             other.transform.position = destination.position;
-            for (int i = 0; i < toDisable.Length; i++)
-            {
-                toDisable[i].SetActive(false);
-            }
-            for (int i = 0; i < toEnable.Length; i++)
-            {
-                toEnable[i].SetActive(true);
-            }
+            Debug.Log("--------------------------------------------------------------------------");
             StartCoroutine(stopPlayer());
+            Debug.Log(Cams.Count);
+            Cams[fromCam - 1].SetActive(false);
+            Cams[toCam - 1].SetActive(true);
+            // for (int i = 0; i < toDisable.Length; i++)
+            // {
+            //     Debug.Log("fromCam set");
+            //     toDisable[i].GetComponent<CamInitialization>().SendMessage("setDisplay", false);
+            // }
+            // for (int i = 0; i < toEnable.Length; i++)
+            // {
+            //     Debug.Log("toCam set");
+            //     toEnable[i].GetComponent<CamInitialization>().SendMessage("setDisplay", true);
+            // }
 
         }
     }
+
     IEnumerator stopPlayer()
     {
         Player[0].GetComponent<PlayerController>().SendMessage("setMoving", false);
@@ -46,5 +56,9 @@ public class ScenceTransition : MonoBehaviour
         yield return new WaitForSeconds(timeToWait);
         Player[0].GetComponent<PlayerController>().SendMessage("setMoving", true);
 
+    }
+    public void addCam(GameObject cam)
+    {
+        Cams.Add(cam);
     }
 }
