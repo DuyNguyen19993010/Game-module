@@ -31,7 +31,7 @@ public class ScenceTransition : MonoBehaviour
             other.transform.position = destination.position;
             Debug.Log("--------------------------------------------------------------------------");
             StartCoroutine(stopPlayer());
-            Debug.Log(Cams.Count);
+            Debug.Log(Cams);
             Cams[fromCam - 1].SetActive(false);
             Cams[toCam - 1].SetActive(true);
             // for (int i = 0; i < toDisable.Length; i++)
