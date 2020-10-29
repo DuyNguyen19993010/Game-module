@@ -13,10 +13,12 @@ public class Attacks : MonoBehaviour
     public float attackTime = 1f;
     public float lightAttackTimeToWait;
     float nextAttackTime = 0f;
+    private bool canBeDamaged;
 
 
     void Start()
     {
+        canBeDamaged = true;
         rb = gameObject.GetComponent<Rigidbody2D>();
         lightAttackTimeToWait = 0.04f;
     }
@@ -48,12 +50,20 @@ public class Attacks : MonoBehaviour
         foreach (Collider2D enemy in hitEnemies)
         {
             float[] AttackDetails = { 10, transform.position.x };
-            enemy.transform.parent.SendMessage("Damage", AttackDetails);
-            enemy.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, 10));
+            enemy.transform.GetComponent<EnemyCombat>().SendMessage("Damage");
+            // enemy.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, 10));
 
         }
         gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
-
-
+    }
+    IEnumerator Damage(float damage)
+    {
+        if (canBeDamaged)
+        {
+            canBeDamaged = false;
+            yield return new WaitForSeconds(1 / 2);
+            canBeDamaged = true;
+            gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", damage);
+        }
     }
 }
