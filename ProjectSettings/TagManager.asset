@@ -12,6 +12,7 @@ TagManager:
   - SceneTransition
   - SceneTransitionSumarize
   - Camera 3
+  - Ally
   layers:
   - Default
   - TransparentFX
