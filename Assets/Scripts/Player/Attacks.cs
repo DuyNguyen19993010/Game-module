@@ -164,7 +164,11 @@ public class Attacks : MonoBehaviour
             foreach (Collider2D boss in hitBoss)
             {
                 float[] AttackDetails = { 10, transform.position.x };
-                boss.transform.GetComponent<BossCombat>().SendMessage("Damage", attackDamage);
+                try
+                {
+                    boss.transform.GetComponent<BossCombat>().SendMessage("Damage", attackDamage);
+                }
+                catch { }
                 playerstat.SendMessage("increaseRage", 10);
             }
         }
@@ -177,7 +181,12 @@ public class Attacks : MonoBehaviour
             foreach (Collider2D enemy in hitEnemies)
             {
                 float[] AttackDetails = { 10, transform.position.x };
-                enemy.transform.GetComponent<EnemyCombat>().SendMessage("Damage", attackDamage);
+                try
+                {
+
+                    enemy.transform.GetComponent<EnemyCombat>().SendMessage("Damage", attackDamage);
+                }
+                catch { }
                 playerstat.SendMessage("increaseRage", 10);
             }
         }
@@ -240,7 +249,11 @@ public class Attacks : MonoBehaviour
         {
             foreach (Collider2D enemy in hitEnemies)
             {
-                enemy.transform.GetComponent<EnemyCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+                try
+                {
+                    enemy.transform.GetComponent<EnemyCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+                }
+                catch { }
 
             }
         }
@@ -252,7 +265,11 @@ public class Attacks : MonoBehaviour
         {
             foreach (Collider2D boss in hitBoss)
             {
-                boss.transform.GetComponent<BossCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+                try
+                {
+                    boss.transform.GetComponent<BossCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+                }
+                catch { }
             }
         }
         catch

@@ -78,11 +78,7 @@ public class EnemyCombat : MonoBehaviour
         }
         enemyAttackTime = 0;
         userAttackTime = 0;
-        try
-        {
-            gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
-        }
-        catch { }
+
     }
     void Damage(float damage)
     {

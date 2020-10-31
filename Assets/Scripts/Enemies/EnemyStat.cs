@@ -38,11 +38,17 @@ public class EnemyStat : MonoBehaviour
         //Disable movement for 1/2s 
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         currentHP -= damage;
+        try
+        {
+            gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
+        }
+        catch { }
         if (currentHP <= 0)
         {
             animator.SetTrigger("Die");
             gameObject.SetActive(false);
         }
+
 
 
     }
