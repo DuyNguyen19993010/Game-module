@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
         {
             movePlayer();
         }
+
     }
     void checkGround()
     {
@@ -133,19 +134,9 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (buttonPressed == "D")
+        if (buttonPressed == "D" || buttonPressed == "A")
         {
-            rb.velocity = (new Vector2(speed, rb.velocity.y));
-
-        }
-        else if (buttonPressed == "A")
-        {
-            rb.velocity = (new Vector2(-speed, rb.velocity.y));
-
-        }
-        else
-        {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.velocity = (new Vector2(speed * Input.GetAxisRaw("Horizontal"), rb.velocity.y));
 
         }
 

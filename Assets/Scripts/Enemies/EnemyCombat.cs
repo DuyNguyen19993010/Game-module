@@ -7,7 +7,6 @@ public class EnemyCombat : MonoBehaviour
     // animator
     public Animator animator;
     public Transform attackPoint;
-    public float attackDelay;
     private bool canAttack;
     private float nextAttackTime;
     public float numberOfAttackPerUnit;
@@ -16,10 +15,16 @@ public class EnemyCombat : MonoBehaviour
     public GameObject target;
     private Collider2D Player;
     public float damage;
+    public float attackFrameSec;
+    public float enemyAttackTime;
+    public float userAttackTime;
+    public float userDamage;
 
     // Start is called before the first frame update
     void Awake()
     {
+
+        enemyAttackTime = 0;
         target = GameObject.FindGameObjectWithTag("player");
         canAttack = true;
         nextAttackTime = 0;
@@ -34,7 +39,6 @@ public class EnemyCombat : MonoBehaviour
 
         if (Time.time > nextAttackTime && canAttack && Mathf.Abs(Vector2.Distance(transform.position, target.transform.position)) <= Mathf.Abs(Vector2.Distance(transform.position, attackPoint.position)))
         {
-            Debug.Log("Attack function calledd");
             animator.SetBool("isRunning", false);
             StartCoroutine(Attack());
             nextAttackTime = Time.time + 1 / numberOfAttackPerUnit;
@@ -43,29 +47,61 @@ public class EnemyCombat : MonoBehaviour
     }
     IEnumerator Attack()
     {
-        Player = Physics2D.OverlapCircle(attackPoint.position, attackRadius, playerLayer);
-        if (Player)
+        try
         {
             gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", false);
-            animator.SetTrigger("Attack");
-            yield return new WaitForSeconds(1);
-            Debug.Log("Enemy attacking");
-            Player.GetComponent<Attacks>().SendMessage("Damage", damage);
         }
-        gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
+        catch { }
+        animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(attackFrameSec);
+        enemyAttackTime = Time.time;
+        Debug.Log("Enemy attacking at time: " + enemyAttackTime);
+        Debug.Log("Player attacking at time: " + userAttackTime);
+        //&& userAttackTime > enemyAttackTime-0.5
+        if (userAttackTime < enemyAttackTime && userAttackTime > enemyAttackTime - 0.25 && userAttackTime != 0)
+        {
+            Debug.Log("Enemy Parried");
+            target.GetComponent<Attacks>().SendMessage("successParry");
+            Damage(userDamage);
+        }
+        else
+        {
+            Player = Physics2D.OverlapCircle(attackPoint.position, attackRadius, playerLayer);
+            try
+            {
+                Player.GetComponent<Attacks>().SendMessage("Damage", damage);
+            }
+            catch
+            {
+                Debug.Log("Exception NUll for enemy:");
+            }
+        }
+        enemyAttackTime = 0;
+        userAttackTime = 0;
+        try
+        {
+            gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
+        }
+        catch { }
     }
-    void Damage()
+    void Damage(float damage)
     {
+        Debug.Log("Enemy hurted");
         canAttack = false;
         gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", false);
         animator.SetBool("isRunning", false);
-        StartCoroutine("Hurt");
+        StartCoroutine("Hurt", damage);
     }
-    IEnumerator Hurt()
+    IEnumerator Hurt(float damage)
     {
-        animator.SetTrigger("Damage");
+        gameObject.GetComponent<EnemyStat>().SendMessage("decreaseHP", damage);
         yield return new WaitForSeconds(1);
         gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
         canAttack = true;
+    }
+    void SetPlayerAttackTime(float[] userDetail)
+    {
+        userAttackTime = userDetail[0];
+        userDamage = userDetail[1] * 3;
     }
 }

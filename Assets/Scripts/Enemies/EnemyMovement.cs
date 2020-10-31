@@ -41,7 +41,7 @@ public class EnemyMovement : MonoBehaviour
         // && Mathf.Abs(Vector2.Distance(transform.position, target.transform.position)) > 1
         if (Vector2.Distance(transform.position, target.transform.position) < detectRadius && Mathf.Abs(Vector2.Distance(transform.position, target.transform.position)) >= Mathf.Abs(Vector2.Distance(transform.position, attackPoint.position)) && canMove)
         {
-            Debug.Log("Player detected");
+
             animator.SetBool("isRunning", true);
             transform.position = Vector2.MoveTowards(transform.position, target.transform.position, moveSpeed * Time.deltaTime);
         }
