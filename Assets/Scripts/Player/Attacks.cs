@@ -80,7 +80,7 @@ public class Attacks : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.K) && canAttack && gameObject.GetComponent<PlayerController>().isGrounded && gameObject.GetComponent<PlayerController>().rb.velocity == new Vector2(0, 0))
         {
-            gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
+
             rb.velocity = new Vector2(0, 0);
             userLastClicked = Time.time;
             keyPressedCount++;
