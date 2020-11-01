@@ -36,21 +36,22 @@ public class PlayerStat : MonoBehaviour
         currentHP += amount;
     }
 
-    IEnumerator decreaseHP(float damage)
+    void decreaseHP(float damage)
     {
         // Play hurt animation
         animator.SetTrigger("hurt");
+        Debug.Log("Player's health:" + currentHP);
 
 
 
         //Disable movement for 1/2s 
-        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-        gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
         animator.SetFloat("Speed", 0);
-        yield return new WaitForSeconds(1 / 2);
         currentHP -= damage;
-
-
+        if (currentHP <= 0)
+        {
+            GameObject temp_player = gameObject;
+            gameObject.SetActive(false);
+        }
         //Enable movement
         gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
         // HP -= damage;

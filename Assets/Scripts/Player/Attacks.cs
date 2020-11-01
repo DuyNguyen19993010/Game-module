@@ -64,12 +64,24 @@ public class Attacks : MonoBehaviour
         //     StartCoroutine(BasicAttack());
         // }
 
+        if (gameObject.GetComponent<Rigidbody2D>().velocity.x == 0)
+        {
+            canAttack = true;
+
+        }
+        else
+        {
+            canAttack = false;
+        }
+
         if (Time.time - userLastClicked > comboDelay)
         {
             keyPressedCount = 0;
         }
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K) && canAttack && gameObject.GetComponent<PlayerController>().isGrounded && gameObject.GetComponent<PlayerController>().rb.velocity == new Vector2(0, 0))
         {
+            gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
+            rb.velocity = new Vector2(0, 0);
             userLastClicked = Time.time;
             keyPressedCount++;
             if (keyPressedCount == 1)
@@ -88,10 +100,15 @@ public class Attacks : MonoBehaviour
             //----------------------Hold and release P for parry
             if (Input.GetKey(KeyCode.P) && gameObject.GetComponent<Rigidbody2D>().velocity == new Vector2(0, 0))
             {
+                gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
+                rb.velocity = new Vector2(0, 0);
+
                 Hold();
             }
             if (Input.GetKeyUp(KeyCode.P))
             {
+                gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
+                rb.velocity = new Vector2(0, 0);
                 StartCoroutine(Parry());
                 userHoldTime = 0;
                 nextAttackTime = Time.time + lightAttackTimeToWait / attackTime;
@@ -99,6 +116,9 @@ public class Attacks : MonoBehaviour
             // //----------------------Press R when rage is full to go into rage mode
             if (Input.GetKeyDown(KeyCode.R) && playerstat.Rage >= 100)
             {
+                gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
+                rb.velocity = new Vector2(0, 0);
+
                 Debug.Log("RageMode ON !!!!!!!!!!!!");
                 EnterRageMode();
                 RageMode = true;
@@ -119,6 +139,7 @@ public class Attacks : MonoBehaviour
     {
         if (keyPressedCount >= 2)
         {
+
             animator.SetBool("LightAttack2", true);
             StartCoroutine(BasicAttack());
         }
@@ -142,11 +163,12 @@ public class Attacks : MonoBehaviour
 
     public IEnumerator BasicAttack()
     {
-        canAttack = false;
+        if (RageMode)
+        {
+            playerstat.SendMessage("increaseHP", playerstat.maxHP * 0.05);
+
+        }
         float[] userDetail = { userHoldTime, attackDamage };
-        //Player can not move
-        rb.velocity = new Vector2(0, 0);
-        gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
         // //Detect enemies in range of the attack
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackBox.position, basic_attack_Range, enemies);
         Collider2D[] hitBoss = Physics2D.OverlapCircleAll(attackBox.position, basic_attack_Range, boss);
@@ -163,9 +185,13 @@ public class Attacks : MonoBehaviour
         {
             foreach (Collider2D boss in hitBoss)
             {
-                float[] AttackDetails = { 10, transform.position.x };
-                boss.transform.GetComponent<BossCombat>().SendMessage("Damage", attackDamage);
-                playerstat.SendMessage("increaseRage", 10);
+                try
+                {
+                    float[] AttackDetails = { 10, transform.position.x };
+                    boss.transform.GetComponent<BossCombat>().SendMessage("Damage", attackDamage);
+                    playerstat.SendMessage("increaseRage", 10);
+                }
+                catch { }
             }
         }
         catch
@@ -176,9 +202,13 @@ public class Attacks : MonoBehaviour
         {
             foreach (Collider2D enemy in hitEnemies)
             {
-                float[] AttackDetails = { 10, transform.position.x };
-                enemy.transform.GetComponent<EnemyCombat>().SendMessage("Damage", attackDamage);
-                playerstat.SendMessage("increaseRage", 10);
+                try
+                {
+                    float[] AttackDetails = { 10, transform.position.x };
+                    enemy.transform.GetComponent<EnemyCombat>().SendMessage("Damage", attackDamage);
+                    playerstat.SendMessage("increaseRage", 10);
+                }
+                catch { }
             }
         }
         catch
@@ -186,12 +216,9 @@ public class Attacks : MonoBehaviour
             Debug.Log("Exception NUll for player:");
         }
         gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
-        canAttack = true;
+
     }
-
-
-
-
+    //-----------------------------------------------------------------Rage mode--------------------------------------------------------
 
     public void EnterRageMode()
     {
@@ -205,20 +232,19 @@ public class Attacks : MonoBehaviour
     IEnumerator DecreaseRage()
     {
         yield return new WaitForSeconds(10.0f);
-        playerstat.GetComponent<PlayerStat>().SendMessage("resetRage");
         weaponHolder.GetComponent<WeaponHolder>().SendMessage("setRage", false);
+        playerstat.GetComponent<PlayerStat>().SendMessage("resetRage");
         attackDamage -= attackDamage * 0.5f;
     }
+
+    //-----------------------------------------Hold and Release to parry------------------------------------------------------
     public void Hold()
     {
-
         animator.SetBool("Hold", true);
-        gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
     }
     IEnumerator Parry()
     {
-        canAttack = false;
-
+        gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
         //Get user parry time
         userHoldTime = Time.time;
         animator.SetBool("Hold", false);
@@ -229,18 +255,22 @@ public class Attacks : MonoBehaviour
         Collider2D[] hitBoss = Physics2D.OverlapCircleAll(attackBox.position, parry_attack_Range, boss);
         if (transform.localScale.x < 0)
         {
-            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(-10, 0);
+            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(-30, 0);
         }
         else
         {
-            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(10, 0);
+            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(30, 0);
         }
         Debug.Log(hitEnemies.Length);
         try
         {
             foreach (Collider2D enemy in hitEnemies)
             {
-                enemy.transform.GetComponent<EnemyCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+                try
+                {
+                    enemy.transform.GetComponent<EnemyCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+                }
+                catch { }
 
             }
         }
@@ -252,16 +282,19 @@ public class Attacks : MonoBehaviour
         {
             foreach (Collider2D boss in hitBoss)
             {
-                boss.transform.GetComponent<BossCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+                try
+                {
+                    boss.transform.GetComponent<BossCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+                }
+                catch { }
             }
         }
         catch
         {
             Debug.Log("Exception NUll for player:");
         }
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.01f);
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-        gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
         canAttack = true;
 
     }

@@ -61,7 +61,7 @@ public class EnemyCombat : MonoBehaviour
         if (userAttackTime < enemyAttackTime && userAttackTime > enemyAttackTime - 0.25 && userAttackTime != 0)
         {
             Debug.Log("Enemy Parried");
-            target.GetComponent<Attacks>().SendMessage("successParry");
+            try { target.GetComponent<Attacks>().SendMessage("successParry"); } catch { Debug.Log("Exception NUll for enemy:"); }
             Damage(userDamage);
         }
         else
@@ -69,7 +69,9 @@ public class EnemyCombat : MonoBehaviour
             Player = Physics2D.OverlapCircle(attackPoint.position, attackRadius, playerLayer);
             try
             {
+
                 Player.GetComponent<Attacks>().SendMessage("Damage", damage);
+
             }
             catch
             {
@@ -80,23 +82,25 @@ public class EnemyCombat : MonoBehaviour
         userAttackTime = 0;
         try
         {
+
             gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
+
         }
-        catch { }
+        catch { Debug.Log("Exception NUll for enemy:"); }
     }
     void Damage(float damage)
     {
         Debug.Log("Enemy hurted");
         canAttack = false;
-        gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", false);
+        try { gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", false); } catch { Debug.Log("Exception NUll for enemy:"); }
         animator.SetBool("isRunning", false);
         StartCoroutine("Hurt", damage);
     }
     IEnumerator Hurt(float damage)
     {
-        gameObject.GetComponent<EnemyStat>().SendMessage("decreaseHP", damage);
-        yield return new WaitForSeconds(1);
-        gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
+        try { gameObject.GetComponent<EnemyStat>().SendMessage("decreaseHP", damage); } catch { Debug.Log("Exception NUll for enemy:"); }
+        yield return new WaitForSeconds(1.5f);
+        try { gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true); } catch { Debug.Log("Exception NUll for enemy:"); }
         canAttack = true;
     }
     void SetPlayerAttackTime(float[] userDetail)

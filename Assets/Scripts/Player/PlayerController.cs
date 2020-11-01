@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         extraJumpsValue = 3;
-        speed = 3.0f;
-        jumpHeight = 5.0f;
+        speed = 10.0f;
+        jumpHeight = 9.0f;
         facingRight = true;
         speedSlowOffset = 0.4f;
         isMoving = true;
@@ -47,7 +47,14 @@ public class PlayerController : MonoBehaviour
     {
 
         //check the input 
-        checkMovementInput();
+        if (isMoving)
+        {
+            checkMovementInput();
+        }
+        else
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        }
         if (isGrounded)
         {
             animator.SetBool("isGrounded", true);
@@ -71,6 +78,10 @@ public class PlayerController : MonoBehaviour
         if (isMoving)
         {
             movePlayer();
+        }
+        else
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
 
     }
@@ -137,6 +148,7 @@ public class PlayerController : MonoBehaviour
         if (buttonPressed == "D" || buttonPressed == "A")
         {
             rb.velocity = (new Vector2(speed * Input.GetAxisRaw("Horizontal"), rb.velocity.y));
+
 
         }
 

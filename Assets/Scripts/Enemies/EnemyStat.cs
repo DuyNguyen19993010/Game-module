@@ -14,7 +14,7 @@ public class EnemyStat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maxHP = 100;
+        maxHP = 30;
         currentHP = maxHP;
         animator = gameObject.GetComponent<Animator>();
         enemymovement = gameObject.GetComponent<EnemyMovement>();
@@ -35,13 +35,12 @@ public class EnemyStat : MonoBehaviour
         // Play hurt animation
         animator.SetTrigger("Damage");
 
-        //Disable movement for 1/2s 
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         currentHP -= damage;
         if (currentHP <= 0)
         {
             animator.SetTrigger("Die");
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
 
 
