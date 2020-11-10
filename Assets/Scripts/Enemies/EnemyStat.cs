@@ -16,7 +16,8 @@ public class EnemyStat : MonoBehaviour
     {
         maxHP = 30;
         currentHP = maxHP;
-        animator = gameObject.GetComponent<Animator>();
+        //Remember to create the animator later after making all animations
+        // animator = gameObject.GetComponent<Animator>();
         enemymovement = gameObject.GetComponent<EnemyMovement>();
     }
     void Update()
@@ -29,36 +30,23 @@ public class EnemyStat : MonoBehaviour
     {
         currentHP += amount;
     }
-
+    //Used for damaging the enemy
     public void decreaseHP(float damage)
     {
-        // Play hurt animation
-        animator.SetTrigger("Damage");
-
+        //--------------------------------Play hurt animation
+        // animator.SetTrigger("hurt");
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         currentHP -= damage;
         if (currentHP <= 0)
         {
-            animator.SetTrigger("Die");
-            Destroy(gameObject);
+            //Play death animation
+            // animator.SetTrigger("Die");
         }
-
-
     }
-
-    // Modification for current permanent stat
-    void increaseMaxHP(float amount)
+    //used as animation event to destroy enemy object
+    void DeleteEnemy()
     {
-        maxHP_temp = maxHP;
-        maxHP += amount;
+        Destroy(gameObject);
     }
-
-    void decreaseMaxHP(float amount)
-    {
-        maxHP_temp = maxHP;
-        maxHP += amount;
-    }
-
-
 
 }

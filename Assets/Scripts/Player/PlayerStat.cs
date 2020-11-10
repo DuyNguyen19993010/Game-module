@@ -14,20 +14,18 @@ public class PlayerStat : MonoBehaviour
     public float Rage;
     public float maxRage;
     public float maxRage_temp;
-    public Health health;
-    public Rage rage;
+    public float damage;
 
     // Start is called before the first frame update
     void Start()
     {
+        damage = 30;
         Rage = 0;
         maxHP = 100;
         currentHP = maxHP;
         maxRage = 100;
         animator = gameObject.GetComponent<Animator>();
         playermovement = gameObject.GetComponent<PlayerController>();
-        health.SetMaxHealth(maxHP);
-        rage.SetMaxRage(maxRage);
 
     }
     void Update()
@@ -45,29 +43,24 @@ public class PlayerStat : MonoBehaviour
     void decreaseHP(float damage)
     {
         // Play hurt animation
-        animator.SetTrigger("hurt");
-        Debug.Log("Player's health:" + currentHP);
-
-
 
         //Disable movement for 1/2s 
-        animator.SetFloat("Speed", 0);
         currentHP -= damage;
-        health.SetHealth(currentHP);
         if (currentHP <= 0)
         {
-            GameObject temp_player = gameObject;
-            gameObject.SetActive(false);
+            //PLay death animation
         }
-        //Enable movement
-        gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
+
         // HP -= damage;
 
+    }
+    void increaseDamage(float amount)
+    {
+        damage += amount;
     }
     void increaseRage(float amount)
     {
         Rage += amount;
-        rage.SetRage(Rage);
     }
     void decreaseRage(float amount)
     {
@@ -76,11 +69,7 @@ public class PlayerStat : MonoBehaviour
     void resetRage()
     {
         Rage = 0;
-        rage.SetRage(Rage);
     }
-
-
-
 
 
     // Modification for current permanent stat

@@ -9,93 +9,87 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     //----------------------------Checking speed and jump height
     public float speed;
-    public float speedSlowOffset;
     public float jumpHeight;
     //Check facing direction
     private bool facingRight;
     public Vector2 movement;
     //------------------------------------Check for ground
     public bool isGrounded;
-    public Transform groundCheck;
-    public float checkRadius;
+    public float groundCheckRadius;
+    private RaycastHit2D groundRayCast;
     public LayerMask whatIsGround;
-    //----------------------------------JUMPING
-    public int extraJumps;
-    public int extraJumpsValue;
     //-=--------------------------------Player input check
     string buttonPressed;
     //--------------------------------Animation
     public Animator animator;
-    public bool isMoving;
+    public bool canMove;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        extraJumpsValue = 3;
-        speed = 10.0f;
-        jumpHeight = 9.0f;
+        speed = 1.0f;
+        jumpHeight = 113.0f;
         facingRight = true;
-        speedSlowOffset = 0.4f;
-        isMoving = true;
+        groundCheckRadius = 0.16f;
+        canMove = true;
+        animator = gameObject.GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
     }
     // Update is called once per frame
     void Update()
     {
-
-        //check the input 
-        if (isMoving)
-        {
-            checkMovementInput();
-        }
-        else
-        {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-        }
-        if (isGrounded)
-        {
-            animator.SetBool("isGrounded", true);
-        }
-        else
-        {
-            animator.SetBool("isGrounded", false);
-        }
-        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
-
-        //check facing direction
+        RayCastDebug();
+        checkGround();
         checkFacingDirection();
+        //check if can move
+        if (canMove)
+        {
+            //check input
+            movement = new Vector2(Input.GetAxisRaw("Horizontal") * speed, rb.velocity.y);
+
+        }
+        animator.SetFloat("Speed", Mathf.Abs(movement.x));
+
 
     }
     void FixedUpdate()
     {
-
-        //Check if player is grounded
-        checkGround();
-        //Move the player
-        if (isMoving)
+        if (canMove)
         {
-            movePlayer();
+            movePlayer(movement);
         }
-        else
+    }
+    void movePlayer(Vector2 my_movement)
+    {
+        rb.velocity = my_movement;
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.AddForce(new Vector2(rb.velocity.x, jumpHeight));
         }
-
     }
     void checkGround()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        groundRayCast = Physics2D.Raycast(transform.position, Vector2.down, groundCheckRadius, whatIsGround);
+        if (groundRayCast.collider != null)
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
+        animator.SetBool("isGrounded", isGrounded);
     }
     void checkFacingDirection()
     {
-        if (rb.velocity.x > 0 && facingRight == false)
+        if (rb.velocity.x > 0 && !facingRight)
         {
             Flip();
         }
-        else if (rb.velocity.x < 0 && facingRight == true)
+        else if (rb.velocity.x < 0 && facingRight)
         {
             Flip();
         }
@@ -108,71 +102,28 @@ public class PlayerController : MonoBehaviour
         transform.localScale = Scaler;
 
     }
+
+
+
+
+
+
+    void FreezePlayer()
+    {
+        rb.velocity = new Vector2(0, 0);
+        canMove = false;
+    }
+    void UnFreezePlayer()
+    {
+        canMove = true;
+    }
+    void RayCastDebug()
+    {
+        Debug.DrawRay(transform.position, Vector2.down * groundCheckRadius, Color.red);
+    }
+
     //------------------------------MOVEMENT METHODS---------------------------------
-    void checkMovementInput()
-    {
-        if (Input.GetKey(KeyCode.D))
-        {
-            buttonPressed = "D";
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            buttonPressed = "A";
-        }
-        else
-        {
-            buttonPressed = "None";
-
-        }
 
 
-        if (Input.GetKey(KeyCode.Space) && extraJumps != 0)
-        {
-            buttonPressed = "Space";
-            animator.SetTrigger("takeOff");
-        }
-        else if (Input.GetKey(KeyCode.Space) && extraJumps == 0 && isGrounded)
-        {
-            buttonPressed = "Space";
-            animator.SetTrigger("takeOff");
-        }
-    }
-    void movePlayer()
-    {
-        if (isGrounded)
-        {
-            extraJumps = extraJumpsValue;
-        }
 
-
-        if (buttonPressed == "D" || buttonPressed == "A")
-        {
-            rb.velocity = (new Vector2(speed * Input.GetAxisRaw("Horizontal"), rb.velocity.y));
-
-
-        }
-
-
-        if (buttonPressed == "Space" && extraJumps != 0)
-        {
-            rb.velocity = (new Vector2(rb.velocity.x, jumpHeight));
-            slowDown();
-            extraJumps--;
-        }
-        else if (buttonPressed == "Space" && extraJumps == 0 && isGrounded)
-        {
-            rb.velocity = (new Vector2(rb.velocity.x, jumpHeight));
-            slowDown();
-
-        }
-
-    }
-    public void setMoving(bool value)
-    {
-        isMoving = value;
-    }
-    void slowDown()
-    {
-        rb.AddForce(new Vector2(rb.velocity.x * -1 * speedSlowOffset, rb.velocity.y));
-    }
 }

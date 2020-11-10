@@ -4,305 +4,202 @@ using UnityEngine;
 
 public class Attacks : MonoBehaviour
 {
-    //----------------------------------------Attack radius-----------------------
-    public float basic_attack_Range = 0.5f;
-    public float parry_attack_Range = 10.5f;
+    //-----------------------------------------------------Combo attack-------------------------------------------------------
+    string[] combo = { "Combo_Attack_1", "Combo_Attack_2" };
+    private int comboIndex = 0;
+    private float nextAttackTime = 0;
+    private float lastAttackTime = 0;
+    private float comboDelay = 0.5f;
+    //--------------------------------------------Jump down attack-------------------------------
+    public Vector2 JumpAttackBoxPosition;
+    public Vector2 JumpAttackBox;
+
+    //------------------------ Parry ------------------------------------------------
+
+    //----------------------------------------Attack radius and raycasts-----------------------
+    public float basic_attack_radius = 0.5f;
+    public float parry_radius = 10.5f;
+
+    [SerializeField] RaycastHit2D[] comboAttackRayCast;
+
     //----------------------------------Detect Layermask/self Rigidbody/Effect--------------------------------------
     public LayerMask enemies;
-    public LayerMask boss;
+    public LayerMask bosses;
     private Rigidbody2D rb;
-    public ParticleSystem RageParticle;
     public Animator animator;
-    public Transform attackBox;
     private PlayerStat playerstat;
+    private PlayerController playermovement;
 
-    //------------------------------------------K Combo Variable-----------------
-    public float attackTime = 1f;
-    public float lightAttackTimeToWait = 0.04f;
-
-    //NextAttackTime<combo_startTime
-    private float nextAttackTime = 0.0f;//Calculate realtime time to able to press button again
-    private float comboDelay = 1.2f;//time limit between each attack in the combo
-    public float keyPressedCount = 0.0f;//Time that K is pressed
-    private float userLastClicked = 0;
     //---------------------------------Action check boolean-----------------------------------------
     private bool canBeDamaged;
     public bool canMove;
-    //------------------------ Parry ------------------------------------------------
-    private float minimumHoldTime;
-    private float userHoldTime;
-    private float userReleaseTime;
 
     //------------------------------------------Rage mode------------------
-    public GameObject weaponHolder;
     private bool RageMode;
     private bool canAttack;
 
-    public float attackDamage;
 
-
-    void Start()
+    void Awake()
     {
-        attackDamage = 10.0f;
-        enemies = LayerMask.GetMask("Enemy");
-        boss = LayerMask.GetMask("Boss");
         canAttack = true;
-        playerstat = gameObject.GetComponent<PlayerStat>();
-        userHoldTime = 0.0f;
-        minimumHoldTime = 2.0f;
         canBeDamaged = true;
+        basic_attack_radius = 0.23f;
+        JumpAttackBox = new Vector2(0.11f, 0.30f);
+        enemies = LayerMask.GetMask("Enemy");
+        bosses = LayerMask.GetMask("Boss");
+        playerstat = gameObject.GetComponent<PlayerStat>();
         rb = gameObject.GetComponent<Rigidbody2D>();
+        animator = gameObject.GetComponent<Animator>();
+        playermovement = gameObject.GetComponent<PlayerController>();
     }
     // Update is called once per frame
     void Update()
     {
-        //------------------------------K combo
-        // if (Input.GetKeyDown(KeyCode.K) && gameObject.GetComponent<PlayerController>().isGrounded && gameObject.GetComponent<PlayerController>().rb.velocity == new Vector2(0, 0))
-        // {
-        //     rb.velocity = new Vector2(0, 0);
-        //     gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
-        //     StartCoroutine(BasicAttack());
-        // }
-
-        if (gameObject.GetComponent<Rigidbody2D>().velocity.x == 0)
+        //RaycastDebugger
+        RayCastDebugger();
+        if (canAttack)
         {
-            canAttack = true;
-
+            //Combo
+            Combo();
+            //Jump down attack
+            JumpAttack();
+            //Parry
         }
-        else
-        {
-            canAttack = false;
-        }
-
-        if (Time.time - userLastClicked > comboDelay)
-        {
-            keyPressedCount = 0;
-        }
-        if (Input.GetKeyDown(KeyCode.K) && canAttack && gameObject.GetComponent<PlayerController>().isGrounded && gameObject.GetComponent<PlayerController>().rb.velocity == new Vector2(0, 0))
-        {
-
-            rb.velocity = new Vector2(0, 0);
-            userLastClicked = Time.time;
-            keyPressedCount++;
-            if (keyPressedCount == 1)
-            {
-                animator.SetBool("LightAttack1", true);
-                StartCoroutine(BasicAttack());
-            }
-            keyPressedCount = Mathf.Clamp(keyPressedCount, 0, 2);
-        }
-
-
-
-
-        if (Time.time >= nextAttackTime && canAttack)
-        {
-            //----------------------Hold and release P for parry
-            if (Input.GetKey(KeyCode.P) && gameObject.GetComponent<Rigidbody2D>().velocity == new Vector2(0, 0))
-            {
-                gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
-                rb.velocity = new Vector2(0, 0);
-
-                Hold();
-            }
-            if (Input.GetKeyUp(KeyCode.P))
-            {
-                gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
-                rb.velocity = new Vector2(0, 0);
-                StartCoroutine(Parry());
-                userHoldTime = 0;
-                nextAttackTime = Time.time + lightAttackTimeToWait / attackTime;
-            }
-            // //----------------------Press R when rage is full to go into rage mode
-            if (Input.GetKeyDown(KeyCode.R) && playerstat.Rage >= 100)
-            {
-                gameObject.GetComponent<PlayerController>().SendMessage("setMoving", false);
-                rb.velocity = new Vector2(0, 0);
-
-                Debug.Log("RageMode ON !!!!!!!!!!!!");
-                EnterRageMode();
-                RageMode = true;
-                nextAttackTime = Time.time + lightAttackTimeToWait / attackTime;
-            }
-
-        }
-
-
-
     }
 
 
 
 
     //---------------------------------Combo------------------------
-    void Attack1()
+    void Combo()
     {
-        if (keyPressedCount >= 2)
+        if (Input.GetKeyDown(KeyCode.K) && playermovement.isGrounded)
         {
+            if (Time.time - lastAttackTime > comboDelay)
+            {
+                comboIndex = 0;
 
-            animator.SetBool("LightAttack2", true);
-            StartCoroutine(BasicAttack());
+            }
+            if (Time.time > nextAttackTime)
+            {
+                animator.Play(combo[comboIndex]);
+                comboIndex += 1;
+
+                if (comboIndex >= combo.Length)
+                {
+                    comboIndex = 0;
+                }
+                lastAttackTime = Time.time;
+                nextAttackTime = Time.time + 0.3f;
+            }
+        }
+    }
+
+    void ComboAttack(float damage)
+    {
+
+        // //Detect enemies in range of the attack
+        if (transform.localScale.x > 0)
+        {
+            comboAttackRayCast = Physics2D.RaycastAll(transform.position, Vector2.right, basic_attack_radius, enemies);
         }
         else
         {
-            animator.SetBool("LightAttack1", false);
-            keyPressedCount = 0;
+            comboAttackRayCast = Physics2D.RaycastAll(transform.position, Vector2.left, basic_attack_radius, enemies);
+        }
+        foreach (RaycastHit2D enemy in comboAttackRayCast)
+        {
+            if (enemy.collider != null)
+            {
+                enemy.collider.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage);
+                Debug.Log(enemy.collider.GetComponent<EnemyStat>().currentHP);
+            }
+        }
+    }
+    void JumpAttack()
+    {
+        if (Input.GetKey(KeyCode.L) && !playermovement.isGrounded)
+        {
+            animator.Play("Jump_Down_Attack");
+        }
+    }
+    void JumpAttackFrame(float damage)
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(new Vector2(transform.position.x, transform.position.y - 0.1f), JumpAttackBox, enemies);
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log("Enemy hit");
         }
     }
 
-    void Attack2()
+    //----------------------------------------- Parry------------------------------------------------------
+
+    void Parry()
     {
-        animator.SetBool("LightAttack1", false);
-        animator.SetBool("LightAttack2", false);
-        keyPressedCount = 0;
-    }
+        // gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
+        // //Get user parry time
+        // if (transform.localScale.x < 0)
+        // {
+        //     gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(-30, 0);
+        // }
+        // else
+        // {
+        //     gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(30, 0);
+        // }
+        // Debug.Log(hitEnemies.Length);
+        // try
+        // {
+        //     foreach (Collider2D enemy in hitEnemies)
+        //     {
+        //         try
+        //         {
+        //             // enemy.transform.GetComponent<EnemyCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+        //         }
+        //         catch { }
 
-
-
-
-
-    public IEnumerator BasicAttack()
-    {
-        if (RageMode)
-        {
-            playerstat.SendMessage("increaseHP", playerstat.maxHP * 0.05);
-
-        }
-        float[] userDetail = { userHoldTime, attackDamage };
-        // //Detect enemies in range of the attack
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackBox.position, basic_attack_Range, enemies);
-        Collider2D[] hitBoss = Physics2D.OverlapCircleAll(attackBox.position, basic_attack_Range, boss);
-
-
-
-        // //Delay player attack and force user to stop moving while the attack is happening
-        yield return new WaitForSeconds(lightAttackTimeToWait);
-
-
-
-        // //Deal damage to those enemies and bosses
-        try
-        {
-            foreach (Collider2D boss in hitBoss)
-            {
-                try
-                {
-                    float[] AttackDetails = { 10, transform.position.x };
-                    boss.transform.GetComponent<BossCombat>().SendMessage("Damage", attackDamage);
-                    playerstat.SendMessage("increaseRage", 10);
-                }
-                catch { }
-            }
-        }
-        catch
-        {
-            Debug.Log("Exception NUll for player:");
-        }
-        try
-        {
-            foreach (Collider2D enemy in hitEnemies)
-            {
-                try
-                {
-                    float[] AttackDetails = { 10, transform.position.x };
-                    enemy.transform.GetComponent<EnemyCombat>().SendMessage("Damage", attackDamage);
-                    playerstat.SendMessage("increaseRage", 10);
-                }
-                catch { }
-            }
-        }
-        catch
-        {
-            Debug.Log("Exception NUll for player:");
-        }
-        gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
+        //     }
+        // }
+        // catch
+        // {
+        //     Debug.Log("Exception NUll for player:");
+        // }
+        // try
+        // {
+        //     foreach (Collider2D boss in hitBoss)
+        //     {
+        //         try
+        //         {
+        //             // boss.transform.GetComponent<BossCombat>().SendMessage("SetPlayerAttackTime", userDetail);
+        //         }
+        //         catch { }
+        //     }
+        // }
+        // catch
+        // {
+        //     Debug.Log("Exception NUll for player:");
+        // }
+        // gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+        // canAttack = true;
 
     }
     //-----------------------------------------------------------------Rage mode--------------------------------------------------------
 
-    public void EnterRageMode()
-    {
-        playerstat.SendMessage("decreaseHP", playerstat.currentHP * 60 / 100);
-        weaponHolder.GetComponent<WeaponHolder>().SendMessage("setRage", true);
-        RageParticle.Play();
-        attackDamage += attackDamage * 0.5f;
-        StartCoroutine(DecreaseRage());
+    // public void EnterRageMode()
+    // {
+    //     playerstat.SendMessage("decreaseHP", playerstat.currentHP * 60 / 100);
+    //     weaponHolder.GetComponent<WeaponHolder>().SendMessage("setRage", true);
+    //     RageParticle.Play();
+    //     attackDamage += attackDamage * 0.5f;
+    //     StartCoroutine(DecreaseRage());
 
-    }
-    IEnumerator DecreaseRage()
-    {
-        yield return new WaitForSeconds(10.0f);
-        weaponHolder.GetComponent<WeaponHolder>().SendMessage("setRage", false);
-        playerstat.GetComponent<PlayerStat>().SendMessage("resetRage");
-        attackDamage -= attackDamage * 0.5f;
-    }
-
-    //-----------------------------------------Hold and Release to parry------------------------------------------------------
-    public void Hold()
-    {
-        animator.SetBool("Hold", true);
-    }
-    IEnumerator Parry()
-    {
-        gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
-        //Get user parry time
-        userHoldTime = Time.time;
-        animator.SetBool("Hold", false);
-        float[] userDetail = { userHoldTime, attackDamage };
-
-        // Search all enemy in range
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackBox.position, parry_attack_Range, enemies);
-        Collider2D[] hitBoss = Physics2D.OverlapCircleAll(attackBox.position, parry_attack_Range, boss);
-        if (transform.localScale.x < 0)
-        {
-            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(-30, 0);
-        }
-        else
-        {
-            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(30, 0);
-        }
-        Debug.Log(hitEnemies.Length);
-        try
-        {
-            foreach (Collider2D enemy in hitEnemies)
-            {
-                try
-                {
-                    enemy.transform.GetComponent<EnemyCombat>().SendMessage("SetPlayerAttackTime", userDetail);
-                }
-                catch { }
-
-            }
-        }
-        catch
-        {
-            Debug.Log("Exception NUll for player:");
-        }
-        try
-        {
-            foreach (Collider2D boss in hitBoss)
-            {
-                try
-                {
-                    boss.transform.GetComponent<BossCombat>().SendMessage("SetPlayerAttackTime", userDetail);
-                }
-                catch { }
-            }
-        }
-        catch
-        {
-            Debug.Log("Exception NUll for player:");
-        }
-        yield return new WaitForSeconds(0.01f);
-        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-        canAttack = true;
-
-    }
-
-
-
-
-
+    // }
+    // IEnumerator DecreaseRage()
+    // {
+    //     yield return new WaitForSeconds(10.0f);
+    //     weaponHolder.GetComponent<WeaponHolder>().SendMessage("setRage", false);
+    //     playerstat.GetComponent<PlayerStat>().SendMessage("resetRage");
+    //     attackDamage -= attackDamage * 0.5f;
+    // }
     //Used to damage the player
     IEnumerator Damage(float damage)
     {
@@ -316,10 +213,29 @@ public class Attacks : MonoBehaviour
             gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", damage);
         }
     }
-
-
     void successParry()
     {
         playerstat.SendMessage("increaseRage", 30);
+    }
+
+    //-------------------------------RayCastDebugger
+    void RayCastDebugger()
+    {
+        //---------------------------attack raycast-------------------
+        if (transform.localScale.x > 0)
+        {
+            Debug.DrawRay(transform.position, Vector2.right * basic_attack_radius, Color.red);
+        }
+        else
+        {
+            Debug.DrawRay(transform.position, Vector2.left * basic_attack_radius, Color.red);
+        }
+
+    }
+    //------------------------------------Gizmos------------------------------
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(new Vector2(transform.position.x, transform.position.y - 0.1f), JumpAttackBox);
     }
 }

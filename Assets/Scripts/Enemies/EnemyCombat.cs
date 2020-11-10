@@ -6,106 +6,113 @@ public class EnemyCombat : MonoBehaviour
 {
     // animator
     public Animator animator;
-    public Transform attackPoint;
+    //---------------------------------Enemy stat
+    private EnemyStat enemyStat;
+    private EnemyMovement enemyMovement;
+    private Rigidbody2D rb;
+    //-------------------------------Used to decide if the enemy can attack or not---------------
     private bool canAttack;
+    //------------------------------Limit number of attack in 1s------------------------------
     private float nextAttackTime;
-    public float numberOfAttackPerUnit;
-    public float attackRadius;
-    public LayerMask playerLayer;
-    public GameObject target;
-    private Collider2D Player;
+    //------------------------------- used for calculating parry----------------------
     public float damage;
-    public float attackFrameSec;
-    public float enemyAttackTime;
-    public float userAttackTime;
-    public float userDamage;
+    private float enemyAttackTime;
+    private float userAttackTime;
+    private float playerDamage;
+    //-----------------------------Attack raycast------------------------------
+    public float attackRadius;
+    [SerializeField] RaycastHit2D attackRayCast;
+    public LayerMask playerLayer;
 
     // Start is called before the first frame update
     void Awake()
     {
-
-        enemyAttackTime = 0;
-        target = GameObject.FindGameObjectWithTag("player");
+        damage = 10.0f;
+        attackRadius = 0.2f;
         canAttack = true;
         nextAttackTime = 0;
+        enemyAttackTime = 0;
+        rb = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
+        enemyStat = gameObject.GetComponent<EnemyStat>();
+        enemyMovement = gameObject.GetComponent<EnemyMovement>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-
-
-        if (Time.time > nextAttackTime && canAttack && Mathf.Abs(Vector2.Distance(transform.position, target.transform.position)) <= Mathf.Abs(Vector2.Distance(transform.position, attackPoint.position)))
+        RayCastDebugger();
+        if (canAttack)
         {
-            animator.SetBool("isRunning", false);
-            StartCoroutine(Attack());
-            nextAttackTime = Time.time + 1 / numberOfAttackPerUnit;
+            if (Time.time > nextAttackTime && !enemyMovement.isMoving)
+            {
+                CloseRangeAttack();
+                nextAttackTime = Time.time + 0.4f;
+            }
         }
 
     }
-    IEnumerator Attack()
+    void CloseRangeAttack()
     {
-        try
-        {
-            gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", false);
-        }
-        catch { }
-        animator.SetTrigger("Attack");
-        yield return new WaitForSeconds(attackFrameSec);
+        //Call attack animation
+        Attack();
+    }
+    //----------------------------Attack function called using animation event------------------------
+    void Attack()
+    {
         enemyAttackTime = Time.time;
-        Debug.Log("Enemy attacking at time: " + enemyAttackTime);
-        Debug.Log("Player attacking at time: " + userAttackTime);
-        //&& userAttackTime > enemyAttackTime-0.5
+        // Debug.Log("Enemy attacking at time: " + enemyAttackTime);
+        // Debug.Log("Player attacking at time: " + userAttackTime);
+        //Check if the player parried at the right time
         if (userAttackTime < enemyAttackTime && userAttackTime > enemyAttackTime - 0.25 && userAttackTime != 0)
         {
             Debug.Log("Enemy Parried");
-            try { target.GetComponent<Attacks>().SendMessage("successParry"); } catch { Debug.Log("Exception NUll for enemy:"); }
-            Damage(userDamage);
+            // try { target.GetComponent<Attacks>().SendMessage("successParry"); } catch { Debug.Log("Exception NUll for enemy:"); }
         }
         else
         {
-            Player = Physics2D.OverlapCircle(attackPoint.position, attackRadius, playerLayer);
-            try
+            //Hurt player
+            if (transform.localScale.x > 0)
             {
-
-                Player.GetComponent<Attacks>().SendMessage("Damage", damage);
-
+                attackRayCast = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.01f), Vector2.right, attackRadius, playerLayer);
             }
-            catch
+            else
             {
-                Debug.Log("Exception NUll for enemy:");
+                attackRayCast = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.01f), Vector2.left, attackRadius, playerLayer);
+            }
+            if (attackRayCast.collider != null)
+            {
+                //Attack player
+                attackRayCast.collider.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", damage);
             }
         }
         enemyAttackTime = 0;
         userAttackTime = 0;
-        try
-        {
-
-            gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
-
-        }
-        catch { Debug.Log("Exception NUll for enemy:"); }
     }
-    void Damage(float damage)
+    //-----------------------Used to hurt enemy----------------------
+    void Hurt(float damage)
     {
-        Debug.Log("Enemy hurted");
-        canAttack = false;
-        try { gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", false); } catch { Debug.Log("Exception NUll for enemy:"); }
-        animator.SetBool("isRunning", false);
-        StartCoroutine("Hurt", damage);
-    }
-    IEnumerator Hurt(float damage)
-    {
-        try { gameObject.GetComponent<EnemyStat>().SendMessage("decreaseHP", damage); } catch { Debug.Log("Exception NUll for enemy:"); }
-        yield return new WaitForSeconds(1.5f);
-        try { gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true); } catch { Debug.Log("Exception NUll for enemy:"); }
+        try { enemyStat.SendMessage("decreaseHP", damage); } catch { Debug.Log("Exception NUll for enemy:"); }
+        try { enemyMovement.SendMessage("setMoving", true); } catch { Debug.Log("Exception NUll for enemy:"); }
         canAttack = true;
     }
-    void SetPlayerAttackTime(float[] userDetail)
+    //-------------------------------------Used to get player parry time----------------------------
+    void SetPlayerAttackTime(float[] playerDetail)
     {
-        userAttackTime = userDetail[0];
-        userDamage = userDetail[1] * 3;
+        userAttackTime = playerDetail[0];
+        playerDamage = playerDetail[1] * 3;
+    }
+    //------------------------------------Raycast debugger------------------------------------
+    void RayCastDebugger()
+    {
+        if (transform.localScale.x > 0)
+        {
+            Debug.DrawRay(new Vector2(transform.position.x, transform.position.y - 0.01f), Vector2.right * attackRadius, Color.blue);
+        }
+        else
+        {
+            Debug.DrawRay(new Vector2(transform.position.x, transform.position.y - 0.01f), Vector2.left * attackRadius, Color.blue);
+        }
     }
 }

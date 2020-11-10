@@ -4,63 +4,184 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    // Enemy's player detection
-    public Transform attackPoint;
+    //------------------------Player detection
     public float detectRadius;
+    private float playerdDistance;
+    public bool followingPlayer;
+    public LayerMask playerLayer;
     //Enemy movement speed
-    public float moveSpeed;
+    public bool isMoving;
+    public float speed;
     //direction
+    private int direction;
     private bool facingRight;
-    private SpriteRenderer playerSprite;
-    //target to move to
-    public Collider2D target;
+    //Rigibody
+    private Rigidbody2D rb;
     //Animator
-    public Animator animator;
+
+
+    //-------------------------check if the enemy is allowed to move
     public bool canMove;
+    //----------------------------------RayCast---------------------------------
+    public LayerMask whatIsWall;
+    public float wallDetectRadius;
+    public float ledgeDetectRadius;
+    [SerializeField] private RaycastHit2D leftWall;
+    [SerializeField] private RaycastHit2D rightWall;
+    [SerializeField] private RaycastHit2D leftLedge;
+    [SerializeField] private RaycastHit2D rightLedge;
 
     void Awake()
     {
-
+        direction = 1;
         canMove = true;
         facingRight = true;
-        playerSprite = gameObject.GetComponent<SpriteRenderer>();
-        animator = transform.GetComponent<Animator>();
-
+        speed = 10;
+        detectRadius = 0.5f;
+        followingPlayer = false;
+        wallDetectRadius = 0.19f;
+        ledgeDetectRadius = 0.12f;
+        isMoving = true;
+        rb = gameObject.GetComponent<Rigidbody2D>();
     }
     void Update()
     {
+        //Raycast debugger
+        RayCastDebugger();
         Flip();
+        detectPlayer();
         if (canMove)
         {
             Move();
+            followPlayer();
         }
 
     }
     void Move()
     {
-        // && Mathf.Abs(Vector2.Distance(transform.position, target.transform.position)) > 1
-        if (Vector2.Distance(transform.position, target.transform.position) < detectRadius && Mathf.Abs(Vector2.Distance(transform.position, target.transform.position)) >= Mathf.Abs(Vector2.Distance(transform.position, attackPoint.position)) && canMove)
+        rb.velocity = new Vector2(direction * speed * Time.deltaTime, rb.velocity.y);
+        WallCheck();
+        LedgeCheck();
+    }
+    void followPlayer()
+    {
+        // playerdDistance = Vector2.Distance(GameObject.FindWithTag("Player").transform.position, transform.position);
+        if (followingPlayer)
         {
 
-            animator.SetBool("isRunning", true);
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, moveSpeed * Time.deltaTime);
+            if (Mathf.Abs(playerdDistance) >= Mathf.Abs(detectRadius - 0.3f))
+            {
+                isMoving = true;
+                if (playerdDistance > 0)
+                {
+                    direction = 1;
+
+                }
+                else
+                {
+                    direction = -1;
+                }
+
+            }
+            else
+            {
+                direction = 0;
+                isMoving = false;
+
+            }
+        }
+
+        // && Mathf.Abs(Vector2.Distance(transform.position, target.transform.position)) > 1
+
+
+    }
+    void detectPlayer()
+    {
+        playerdDistance = (GameObject.FindWithTag("Player").transform.position.x - transform.position.x);
+        if (Mathf.Abs(playerdDistance) < detectRadius)
+        {
+            followingPlayer = true;
         }
         else
         {
-            animator.SetBool("isRunning", false);
+            followingPlayer = false;
         }
+    }
+    void WallCheck()
+    {
+        //Wall left raycast
+        leftWall = Physics2D.Raycast(transform.position, Vector2.left, wallDetectRadius, whatIsWall);
+        //Wall right raycast
+        rightWall = Physics2D.Raycast(transform.position, Vector2.right, wallDetectRadius, whatIsWall);
+        if (leftWall.collider != null)
+        {
+            if (!followingPlayer)
+            {
+                direction = 1;
+            }
+            else
+            {
+                direction = 0;
+            }
+        }
+        if (rightWall.collider != null)
+        {
+            if (!followingPlayer)
+            {
+                direction = -1;
+            }
+            else
+            {
+                direction = 0;
+            }
+        }
+        // if (leftWall.collider != null && rightWall.collider != null)
+        // {
+        //     direction = 0;
+        // }
+    }
+    void LedgeCheck()
+    {
+        leftLedge = Physics2D.Raycast(new Vector2(transform.position.x - 0.1f, transform.position.y), Vector2.down, ledgeDetectRadius, whatIsWall);
+        rightLedge = Physics2D.Raycast(new Vector2(transform.position.x + 0.1f, transform.position.y), Vector2.down, ledgeDetectRadius, whatIsWall);
+        if (leftLedge.collider == null)
+        {
+            if (!followingPlayer)
+            {
+                direction = 1;
+            }
+            else
+            {
+                direction = 0;
+            }
+        }
+        if (rightLedge.collider == null)
+        {
+            if (!followingPlayer)
+            {
+                direction = -1;
+            }
+            else
+            {
+                direction = 0;
+            }
 
+        }
+        // if (leftLedge.collider == null && rightLedge.collider == null)
+        // {
+        //     direction = 0;
+        // }
     }
     void Flip()
     {
-        if ((target.transform.position.x - transform.position.x) > 0.0 && !facingRight)
+        if (rb.velocity.x > 0.0 && !facingRight)
         {
             facingRight = !facingRight;
             Vector3 Scaler = transform.localScale;
             Scaler.x *= -1;
             transform.localScale = Scaler;
         }
-        else if ((target.transform.position.x - transform.position.x) < 0.0 && facingRight)
+        else if (rb.velocity.x < 0.0 && facingRight)
         {
             facingRight = !facingRight;
             Vector3 Scaler = transform.localScale;
@@ -70,8 +191,30 @@ public class EnemyMovement : MonoBehaviour
         }
 
     }
-    void setMoving(bool value)
+    void FreezeEnemy()
     {
-        canMove = value;
+        rb.velocity = new Vector2(0, 0);
+        canMove = false;
+    }
+    void UnFreezeEnemy()
+    {
+        canMove = true;
+    }
+    void RayCastDebugger()
+    {
+        //-----------------------left wall check
+        Debug.DrawRay(transform.position, Vector2.left * wallDetectRadius, Color.red);
+        //-----------------------Right wall check
+        Debug.DrawRay(transform.position, Vector2.right * wallDetectRadius, Color.red);
+
+        //-----------------------left ledge check
+        Debug.DrawRay(new Vector2(transform.position.x - 0.1f, transform.position.y), Vector2.down * ledgeDetectRadius, Color.green);
+        //-----------------------Right ledge check
+        Debug.DrawRay(new Vector2(transform.position.x + 0.1f, transform.position.y), Vector2.down * ledgeDetectRadius, Color.green);
+    }
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectRadius);
     }
 }

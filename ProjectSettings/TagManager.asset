@@ -4,7 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - player
   - Ground
   - Enemy
   - Camera 1
@@ -13,6 +12,7 @@ TagManager:
   - SceneTransitionSumarize
   - Camera 3
   - Ally
+  - player
   layers:
   - Default
   - TransparentFX
