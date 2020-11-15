@@ -5,33 +5,39 @@ using UnityEngine;
 public class Attacks : MonoBehaviour
 {
     //-----------------------------------------------------Combo attack-------------------------------------------------------
+    [Header("Combo list and range")]
     string[] combo = { "Combo_Attack_1", "Combo_Attack_2" };
     private int comboIndex = 0;
     private float nextAttackTime = 0;
     private float lastAttackTime = 0;
     private float comboDelay = 0.5f;
+    public float basic_attack_radius = 0.5f;
     //--------------------------------------------Jump down attack-------------------------------
+    [Header("Jump attack hit box's size and position")]
     public Vector2 JumpAttackBoxPosition;
     public Vector2 JumpAttackBox;
 
     //------------------------ Parry ------------------------------------------------
 
     //----------------------------------------Attack radius and raycasts-----------------------
-    public float basic_attack_radius = 0.5f;
+    [Header("Parry attack radius")]
     public float parry_radius = 10.5f;
 
     [SerializeField] RaycastHit2D[] comboAttackRayCast;
 
     //----------------------------------Detect Layermask/self Rigidbody/Effect--------------------------------------
+    [Header("Enemy layers")]
     public LayerMask enemies;
     public LayerMask bosses;
     private Rigidbody2D rb;
+    [Header("Animator")]
     public Animator animator;
     private PlayerStat playerstat;
     private PlayerController playermovement;
 
     //---------------------------------Action check boolean-----------------------------------------
-    private bool canBeDamaged;
+    [Header("Check if can be damaged or moved")]
+    public bool canBeDamaged;
     public bool canMove;
 
     //------------------------------------------Rage mode------------------

@@ -166,6 +166,14 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
+  isLefttWalled: 0
+  isRighttWalled: 0
+  wallCheckRadius: 0
+  wallSlideSpeed: 0
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 0
+  dashSpeed: 0
   animator: {fileID: 0}
   canMove: 0
 --- !u!114 &7747928250952380579
@@ -180,9 +188,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 977bfdea0fe98bc4c812ed7e06b4d279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  basic_attack_radius: 0.5
   JumpAttackBoxPosition: {x: -0.814, y: 0.063}
   JumpAttackBox: {x: 0.5, y: 0.5}
-  basic_attack_radius: 0.5
   parry_radius: 10.5
   enemies:
     serializedVersion: 2
@@ -191,6 +199,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   animator: {fileID: 0}
+  canBeDamaged: 0
   canMove: 0
 --- !u!114 &7747928250952380576
 MonoBehaviour:
@@ -204,11 +213,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ee43a346efb9f541b0d3e5158599ce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playermovement: {fileID: 0}
-  currentHP: 0
   maxHP: 0
-  maxHP_temp: 0
-  Rage: 0
   maxRage: 0
-  maxRage_temp: 0
   damage: 0
+  maxHP_temp: 0
+  maxRage_temp: 0
+  currentHP: 0
+  Rage: 0
+  playermovement: {fileID: 0}

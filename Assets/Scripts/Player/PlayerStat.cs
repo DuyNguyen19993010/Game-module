@@ -7,14 +7,16 @@ public class PlayerStat : MonoBehaviour
     //animator
     private Animator animator;
     //---------------------Stat
-    public PlayerController playermovement;
-    public float currentHP;
+    [Header("Max Stat")]
     public float maxHP;
-    public float maxHP_temp;
-    public float Rage;
     public float maxRage;
-    public float maxRage_temp;
     public float damage;
+    public float maxHP_temp;
+    public float maxRage_temp;
+    [Header("Current stat")]
+    public float currentHP;
+    public float Rage;
+    public PlayerController playermovement;
 
     // Start is called before the first frame update
     void Start()
