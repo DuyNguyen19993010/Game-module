@@ -23,7 +23,7 @@ public class BossCombat : MonoBehaviour
     void Awake()
     {
         enemyAttackTime = 0;
-        target = GameObject.FindGameObjectWithTag("player");
+        target = GameObject.FindGameObjectWithTag("Player");
         canAttack = true;
         nextAttackTime = 0;
         animator = gameObject.GetComponent<Animator>();
