@@ -13,6 +13,9 @@ TagManager:
   - Camera 3
   - Ally
   - player
+  - Tornado
+  - Indicator
+  - Boss
   layers:
   - Default
   - TransparentFX

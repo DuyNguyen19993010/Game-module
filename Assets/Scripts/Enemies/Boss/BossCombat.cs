@@ -49,8 +49,6 @@ public class BossCombat : MonoBehaviour
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(attackFrameSec);
         enemyAttackTime = Time.time;
-        Debug.Log("Enemy attacking at time: " + enemyAttackTime);
-        Debug.Log("Player attacking at time: " + userAttackTime);
         //&& userAttackTime > enemyAttackTime-0.5
         if (userAttackTime < enemyAttackTime && userAttackTime != 0)
         {
@@ -71,13 +69,11 @@ public class BossCombat : MonoBehaviour
         }
         enemyAttackTime = 0;
         userAttackTime = 0;
-        gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
     }
     void Damage()
     {
         Debug.Log("Enemy hurted");
         canAttack = false;
-        gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", false);
         animator.SetBool("isRunning", false);
         StartCoroutine("Hurt");
     }
@@ -85,7 +81,6 @@ public class BossCombat : MonoBehaviour
     {
         animator.SetTrigger("Damage");
         yield return new WaitForSeconds(1);
-        gameObject.GetComponent<EnemyMovement>().SendMessage("setMoving", true);
         canAttack = true;
     }
     void SetPlayerAttackTime(float attackTime)
