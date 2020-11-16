@@ -22,8 +22,9 @@ public class WindMove : MonoBehaviour
         if(playermovement != null){
             playermovement.SendMessage("setMoving", false);
             playerstat.SendMessage("decreaseHP", 10);
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
+        
     }
 
 }
