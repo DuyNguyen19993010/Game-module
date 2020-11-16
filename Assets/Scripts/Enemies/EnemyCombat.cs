@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
-    // animator
-    public Animator animator;
+    // Animatoion
+    [Header("Animation manager")]
+    public AnimationManager animation_manager;
     //---------------------------------Enemy stat
     private EnemyStat enemyStat;
     private EnemyMovement enemyMovement;
@@ -14,11 +15,15 @@ public class EnemyCombat : MonoBehaviour
     private bool canAttack;
     //------------------------------Limit number of attack in 1s------------------------------
     private float nextAttackTime;
+    [Header("Enemy attack stat")]
     //------------------------------- used for calculating parry----------------------
     public float damage;
+    [Header("Check if the enemy is attacking")]
+    public bool isAttacking;
     private float enemyAttackTime;
     private float userAttackTime;
     private float playerDamage;
+    [Header("Attack radius")]
     //-----------------------------Attack raycast------------------------------
     public float attackRadius;
     [SerializeField] RaycastHit2D attackRayCast;
@@ -33,7 +38,7 @@ public class EnemyCombat : MonoBehaviour
         nextAttackTime = 0;
         enemyAttackTime = 0;
         rb = gameObject.GetComponent<Rigidbody2D>();
-        animator = gameObject.GetComponent<Animator>();
+        animation_manager = gameObject.GetComponent<AnimationManager>();
         enemyStat = gameObject.GetComponent<EnemyStat>();
         enemyMovement = gameObject.GetComponent<EnemyMovement>();
 
@@ -48,7 +53,7 @@ public class EnemyCombat : MonoBehaviour
             if (Time.time > nextAttackTime && !enemyMovement.isMoving)
             {
                 CloseRangeAttack();
-                nextAttackTime = Time.time + 0.4f;
+                nextAttackTime = Time.time + 1f;
             }
         }
 
@@ -56,7 +61,7 @@ public class EnemyCombat : MonoBehaviour
     void CloseRangeAttack()
     {
         //Call attack animation
-        Attack();
+        animation_manager.SendMessage("attack_animation");
     }
     //----------------------------Attack function called using animation event------------------------
     void Attack()

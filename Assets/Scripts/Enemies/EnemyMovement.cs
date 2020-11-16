@@ -4,24 +4,25 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    [Header("Player detection")]
     //------------------------Player detection
     public float detectRadius;
     private float playerdDistance;
     public bool followingPlayer;
     public LayerMask playerLayer;
+    [Header("Enemy movement's attributes")]
     //Enemy movement speed
     public bool isMoving;
     public float speed;
     //direction
-    private int direction;
+    public int direction;
     private bool facingRight;
     //Rigibody
     private Rigidbody2D rb;
-    //Animator
-
-
+    [Header("Check if the enemy is allowed to move")]
     //-------------------------check if the enemy is allowed to move
     public bool canMove;
+    [Header("Obstacle detect radius")]
     //----------------------------------RayCast---------------------------------
     public LayerMask whatIsWall;
     public float wallDetectRadius;
@@ -65,7 +66,6 @@ public class EnemyMovement : MonoBehaviour
     }
     void followPlayer()
     {
-        // playerdDistance = Vector2.Distance(GameObject.FindWithTag("Player").transform.position, transform.position);
         if (followingPlayer)
         {
 
@@ -167,10 +167,6 @@ public class EnemyMovement : MonoBehaviour
             }
 
         }
-        // if (leftLedge.collider == null && rightLedge.collider == null)
-        // {
-        //     direction = 0;
-        // }
     }
     void Flip()
     {

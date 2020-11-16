@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("LEFT FALSE!!!");
+
             isRighttWalled = false;
         }
 
@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("RIGHT FALSE!!!");
+
             isLefttWalled = false;
         }
 
@@ -207,12 +207,6 @@ public class PlayerController : MonoBehaviour
         transform.localScale = Scaler;
 
     }
-
-
-
-
-
-
     void FreezePlayer()
     {
         rb.velocity = new Vector2(0, 0);
