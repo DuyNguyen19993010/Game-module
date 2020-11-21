@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerStat : MonoBehaviour
 {
+    //---------------------------Player ------------------------------
+    public Player player;
     //animator
     private Animator animator;
     //---------------------Stat
@@ -17,15 +19,18 @@ public class PlayerStat : MonoBehaviour
     public float currentHP;
     public float Rage;
     public PlayerController playermovement;
+    public bool canBeHurt;
 
     // Start is called before the first frame update
     void Start()
     {
-        damage = 30;
-        Rage = 0;
-        maxHP = 100;
+        player = new Player(10, 10, 5);
+        canBeHurt = true;
+        maxHP = player.maxHP;
+        maxRage = player.maxRage;
+        damage = player.damage;
         currentHP = maxHP;
-        maxRage = 100;
+        Rage = 0;
         animator = gameObject.GetComponent<Animator>();
         playermovement = gameObject.GetComponent<PlayerController>();
 
@@ -39,19 +44,30 @@ public class PlayerStat : MonoBehaviour
     // Modification for current real time stat
     void increaseHP(float amount)
     {
+        Debug.Log("Increase by" + amount);
         currentHP += amount;
+        if (currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
     }
 
     void decreaseHP(float damage)
     {
-        // Play hurt animation
 
-        //Disable movement for 1/2s 
-        currentHP -= damage;
-        if (currentHP <= 0)
+
+        if (canBeHurt)
         {
-            //PLay death animation
+            Debug.Log("Hurt");
+            // Play hurt animation
+            currentHP -= damage;
+            if (currentHP <= 0)
+            {
+                currentHP = 0;
+                //PLay death animation
+            }
         }
+
 
         // HP -= damage;
 
@@ -59,6 +75,10 @@ public class PlayerStat : MonoBehaviour
     void increaseDamage(float amount)
     {
         damage += amount;
+    }
+    void decreaseDamage(float amount)
+    {
+        damage -= amount;
     }
     void increaseRage(float amount)
     {

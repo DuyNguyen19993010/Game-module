@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
-    // Animatoion
+    //----------------------- Animator------------------------------
     [Header("Animation manager")]
     public AnimationManager animation_manager;
     //---------------------------------Enemy stat
@@ -29,7 +29,7 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] RaycastHit2D attackRayCast;
     public LayerMask playerLayer;
 
-    // Start is called before the first frame update
+
     void Awake()
     {
         damage = 10.0f;
@@ -44,13 +44,12 @@ public class EnemyCombat : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         RayCastDebugger();
         if (canAttack)
         {
-            if (Time.time > nextAttackTime && !enemyMovement.isMoving)
+            if (Time.time > nextAttackTime && !enemyMovement.isMoving && enemyMovement.followingPlayer)
             {
                 CloseRangeAttack();
                 nextAttackTime = Time.time + 1f;
@@ -77,19 +76,29 @@ public class EnemyCombat : MonoBehaviour
         }
         else
         {
-            //Hurt player
-            if (transform.localScale.x > 0)
+            try
             {
-                attackRayCast = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.01f), Vector2.right, attackRadius, playerLayer);
+                //Hurt player
+                if (transform.localScale.x > 0)
+                {
+                    attackRayCast = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.01f), Vector2.right, attackRadius, playerLayer);
+                }
+                else
+                {
+                    attackRayCast = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.01f), Vector2.left, attackRadius, playerLayer);
+                }
+                if (attackRayCast.collider != null)
+                {
+                    //Attack player
+                    attackRayCast.collider.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", damage);
+                }
             }
-            else
+            catch
             {
-                attackRayCast = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.01f), Vector2.left, attackRadius, playerLayer);
-            }
-            if (attackRayCast.collider != null)
-            {
-                //Attack player
-                attackRayCast.collider.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", damage);
+                Debug.Log("Combat Script");
+                rb.GetComponent<EnemyMovement>().SendMessage("UnFreezeEnemy");
+                enemyMovement.followingPlayer = false;
+                enemyMovement.direction = 1;
             }
         }
         enemyAttackTime = 0;

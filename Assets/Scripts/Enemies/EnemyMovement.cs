@@ -60,35 +60,68 @@ public class EnemyMovement : MonoBehaviour
     }
     void Move()
     {
-        rb.velocity = new Vector2(direction * speed * Time.deltaTime, rb.velocity.y);
-        WallCheck();
-        LedgeCheck();
+        if (!followingPlayer)
+        {
+            rb.velocity = new Vector2(direction * speed * Time.deltaTime, rb.velocity.y);
+            WallCheck();
+            LedgeCheck();
+        }
     }
     void followPlayer()
     {
-        if (followingPlayer)
+        try
         {
-
-            if (Mathf.Abs(playerdDistance) >= Mathf.Abs(detectRadius - 0.3f))
+            if (followingPlayer)
             {
-                isMoving = true;
-                if (playerdDistance > 0)
+                canMove = true;
+
+                if (Mathf.Abs(playerdDistance) >= Mathf.Abs(detectRadius - 0.3f))
                 {
-                    direction = 1;
+                    isMoving = true;
+                    if (playerdDistance > 0)
+                    {
+                        direction = 1;
+
+                    }
+                    else
+                    {
+                        direction = -1;
+                    }
+                    rb.velocity = new Vector2(direction * speed * Time.deltaTime, rb.velocity.y);
 
                 }
                 else
                 {
-                    direction = -1;
+                    if (playerdDistance < 0 && facingRight)
+                    {
+                        facingRight = !facingRight;
+                        Vector3 Scaler = transform.localScale;
+                        Scaler.x *= -1;
+                        transform.localScale = Scaler;
+                    }
+                    else if (playerdDistance > 0 && !facingRight)
+                    {
+                        facingRight = !facingRight;
+                        Vector3 Scaler = transform.localScale;
+                        Scaler.x *= -1;
+                        transform.localScale = Scaler;
+                    }
+                    // rb.velocity = new Vector2(0, 0);
+                    isMoving = false;
                 }
-
             }
             else
             {
-                direction = 0;
-                isMoving = false;
-
+                isMoving = true;
             }
+
+        }
+        catch
+        {
+            Debug.Log("Movement Script");
+            UnFreezeEnemy();
+            followingPlayer = false;
+            direction = 1;
         }
 
         // && Mathf.Abs(Vector2.Distance(transform.position, target.transform.position)) > 1
@@ -97,14 +130,24 @@ public class EnemyMovement : MonoBehaviour
     }
     void detectPlayer()
     {
-        playerdDistance = (GameObject.FindWithTag("Player").transform.position.x - transform.position.x);
-        if (Mathf.Abs(playerdDistance) < detectRadius)
+        try
         {
-            followingPlayer = true;
+            playerdDistance = (GameObject.FindWithTag("Player").transform.position.x - transform.position.x);
+            if (Mathf.Abs(playerdDistance) < detectRadius)
+            {
+                followingPlayer = true;
+            }
+            else
+            {
+                followingPlayer = false;
+            }
         }
-        else
+        catch
         {
+            UnFreezeEnemy();
             followingPlayer = false;
+            isMoving = true;
+            direction = 1;
         }
     }
     void WallCheck()
@@ -135,10 +178,6 @@ public class EnemyMovement : MonoBehaviour
                 direction = 0;
             }
         }
-        // if (leftWall.collider != null && rightWall.collider != null)
-        // {
-        //     direction = 0;
-        // }
     }
     void LedgeCheck()
     {
@@ -183,7 +222,6 @@ public class EnemyMovement : MonoBehaviour
             Vector3 Scaler = transform.localScale;
             Scaler.x *= -1;
             transform.localScale = Scaler;
-
         }
 
     }

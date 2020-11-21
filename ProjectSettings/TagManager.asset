@@ -16,6 +16,7 @@ TagManager:
   - Tornado
   - Indicator
   - Boss
+  - AmountText
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - Enemy
   - Player
   - Boss
-  - 
+  - Ally
   - 
   - 
   - 

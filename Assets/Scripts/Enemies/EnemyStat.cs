@@ -41,6 +41,7 @@ public class EnemyStat : MonoBehaviour
         {
             //Play death animation
             // animator.SetTrigger("Die");
+            Destroy(transform.gameObject);
         }
     }
     //used as animation event to destroy enemy object

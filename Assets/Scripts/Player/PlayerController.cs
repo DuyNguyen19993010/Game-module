@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//---------------------------------All of the code below is my own-----------------------------
+//---------------------------------Any Reused code from other people will be documented-------------------
 public class PlayerController : MonoBehaviour
 
 {
@@ -30,10 +31,18 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D wallLeftRayCast;
     private RaycastHit2D wallRightRayCast;
     public LayerMask whatIsWall;
-    //-=--------------------------------Dashj---------------------
+    //-=--------------------------------Dash---------------------
     [Header("Dash")]
+    private float dashTimeLeft;
+    private float lastImageXpos;
+    private float lastDash = -100;
+    private bool isDashing;
+    public float dashTime;
     public float dashSpeed;
-    private float nextDashTime;
+    public float distanceBetweenImages;
+    public float dashCoolDown;
+    public bool isPressed = false;
+
 
     //-=--------------------------------Player input check
     string buttonPressed;
@@ -49,14 +58,17 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         speed = 1.0f;
-        jumpHeight = 113.0f;
+        jumpHeight = 145.0f;
         facingRight = true;
         groundCheckRadius = 0.16f;
         wallCheckRadius = 0.09f;
         wallSlideSpeed = 0.1f;
         canMove = true;
-        dashSpeed = 18;
-        nextDashTime = 0;
+        dashTime = 0.2f;
+        dashSpeed = 5;
+
+        distanceBetweenImages = 0.1f;
+        dashCoolDown = 2.5f;
         animator = gameObject.GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
@@ -68,6 +80,7 @@ public class PlayerController : MonoBehaviour
         checkGround();
         wallCheck();
         wallJump();
+        CheckDash();
         checkFacingDirection();
         //check if can move
         if (canMove)
@@ -85,21 +98,23 @@ public class PlayerController : MonoBehaviour
         if (canMove)
         {
             movePlayer(movement);
-            Jump();
             wallSlide();
             Dash();
+            StartCoroutine(Jump());
         }
     }
     void movePlayer(Vector2 my_movement)
     {
         rb.velocity = my_movement;
     }
-    void Jump()
+    IEnumerator Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(new Vector2(rb.velocity.x, jumpHeight));
         }
+        yield return new WaitForSeconds(0.01f);
+
     }
     void wallSlide()
     {
@@ -173,21 +188,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void Dash()
-    {
-        if (isGrounded && Input.GetKeyDown(KeyCode.LeftShift) && Time.time > nextDashTime)
-        {
-            if (transform.localScale.x > 0)
-            {
-                rb.AddForce(new Vector2(dashSpeed, 0), ForceMode2D.Impulse);
-            }
-            if (transform.localScale.x < 0)
-            {
-                rb.AddForce(new Vector2(-dashSpeed, 0), ForceMode2D.Impulse);
-            }
-            nextDashTime = Time.time + 1;
-        }
-    }
+
     void checkFacingDirection()
     {
         if (rb.velocity.x > 0 && !facingRight)
@@ -207,6 +208,68 @@ public class PlayerController : MonoBehaviour
         transform.localScale = Scaler;
 
     }
+
+    void Dash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            if (Time.time >= (lastDash + dashCoolDown)) { }
+            AttemptToDash();
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            isPressed = false;
+        }
+    }
+    void AttemptToDash()
+    {
+        isDashing = true;
+        dashTimeLeft = dashTime;
+        lastDash = Time.time;
+        PlayerAfterImagePool.Instance.GetFromPool();
+        lastImageXpos = transform.position.x;
+    }
+    private void CheckDash()
+    {
+        isPressed = true;
+
+        if (isDashing)
+        {
+            if (dashTimeLeft > 0)
+            {
+                FreezePlayer();
+
+                if (transform.localScale.x > 0)
+                {
+                    rb.velocity = new Vector2(dashSpeed, rb.velocity.y);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(-dashSpeed, rb.velocity.y);
+                }
+                dashTimeLeft -= Time.deltaTime;
+                if (Mathf.Abs(transform.position.x - lastImageXpos) > distanceBetweenImages)
+                {
+                    PlayerAfterImagePool.Instance.GetFromPool();
+                    lastImageXpos = transform.position.x;
+                }
+            }
+            if (dashTimeLeft <= 0 || isRighttWalled || isLefttWalled)
+            {
+                isDashing = false;
+                UnFreezePlayer();
+
+            }
+            StartCoroutine(Jump());
+
+
+
+        }
+    }
+
+
+
+
     void FreezePlayer()
     {
         rb.velocity = new Vector2(0, 0);

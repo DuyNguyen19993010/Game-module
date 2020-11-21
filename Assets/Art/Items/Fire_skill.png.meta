@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: 7694623313566320672
     second: Fire_skill_0
+  - first:
+      213: -2951661818831457294
+    second: Fire_skill_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -106,8 +109,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0284f85c22bc8ca60800000000000000
-      internalID: 7694623313566320672
+      spriteID: 2f3b77fd6379907d0800000000000000
+      internalID: -2951661818831457294
       vertices: []
       indices: 
       edges: []
