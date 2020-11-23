@@ -145,7 +145,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -175,7 +175,7 @@ SpriteRenderer:
   m_Size: {x: 3.125, y: 1.71875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &2913292339105489766
@@ -239,19 +239,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 2913292339105489767}
   speed: 0
-  speedSlowOffset: 0
   jumpHeight: 0
   movement: {x: 0, y: 0}
   isGrounded: 0
-  groundCheck: {fileID: 2913292338891831870}
-  checkRadius: 0.2
+  groundCheckRadius: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  extraJumps: 0
-  extraJumpsValue: 1
+  isLefttWalled: 0
+  isRighttWalled: 0
+  wallCheckRadius: 0
+  wallSlideSpeed: 0
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 0
+  dashTime: 0
+  dashSpeed: 0
+  distanceBetweenImages: 0
+  dashCoolDown: 0
+  isPressed: 0
   animator: {fileID: 8279370945573602261}
-  isMoving: 0
+  canMove: 0
 --- !u!70 &2913292339105489789
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -280,15 +288,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 977bfdea0fe98bc4c812ed7e06b4d279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 8279370945573602261}
-  attackBox: {fileID: 2913292338828655097}
-  basic_attack_Range: 0.5
+  basic_attack_radius: 0.5
+  JumpAttackBoxPosition: {x: 0, y: 0}
+  JumpAttackBox: {x: 0, y: 0}
+  parry_radius: 10.5
+  isUsingFireSkill: 0
+  fire_skill_nextUseTime: 0
+  fire_skill_cooldown: 0
+  fireSlash: {fileID: 0}
+  isUsingMoonSkill: 0
+  moon_skill_nextUseTime: 0
+  moon_skill_cooldown: 0
+  isUsingWindSkill: 0
+  wind_skill_nextUseTime: 0
+  wind_skill_cooldown: 0
+  slamRadius: 0
+  diveForce: 0
   enemies:
     serializedVersion: 2
     m_Bits: 512
+  bosses:
+    serializedVersion: 2
+    m_Bits: 0
+  animator: {fileID: 8279370945573602261}
+  canBeDamaged: 0
   canMove: 0
-  attackTime: 1
-  lightAttackTimeToWait: 0
 --- !u!95 &8279370945573602261
 Animator:
   serializedVersion: 3
@@ -299,7 +323,7 @@ Animator:
   m_GameObject: {fileID: 2913292339105489764}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6037f4c47c06b9249830cf9ea457affc, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

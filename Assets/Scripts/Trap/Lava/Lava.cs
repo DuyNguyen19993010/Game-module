@@ -12,12 +12,14 @@ public class Lava : MonoBehaviour
     }
 
     //while player touches the lava, kill the player
-    void OnCollisionEnter2D(Collision2D collides){
-        
-        if(collides.gameObject.name.Equals("Player")){
+    void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (other.tag == ("Player") || other.tag == ("Enemy"))
+        {
             //stats.SendMessage("decreaseHP", 10);
-            Destroy(collides.gameObject);
+            Destroy(other.gameObject);
         }
-        
+
     }
 }

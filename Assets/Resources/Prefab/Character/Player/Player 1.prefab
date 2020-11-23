@@ -57,7 +57,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -174,7 +174,11 @@ MonoBehaviour:
   whatIsWall:
     serializedVersion: 2
     m_Bits: 256
+  dashTime: 0
   dashSpeed: 0
+  distanceBetweenImages: 0
+  dashCoolDown: 0
+  isPressed: 0
   animator: {fileID: 0}
   canMove: 0
 --- !u!114 &8176264455230837847
@@ -193,6 +197,18 @@ MonoBehaviour:
   JumpAttackBoxPosition: {x: -0.814, y: 0.063}
   JumpAttackBox: {x: 0.5, y: 0.5}
   parry_radius: 10.5
+  isUsingFireSkill: 0
+  fire_skill_nextUseTime: 0
+  fire_skill_cooldown: 0
+  fireSlash: {fileID: 0}
+  isUsingMoonSkill: 0
+  moon_skill_nextUseTime: 0
+  moon_skill_cooldown: 0
+  isUsingWindSkill: 0
+  wind_skill_nextUseTime: 0
+  wind_skill_cooldown: 0
+  slamRadius: 0
+  diveForce: 0
   enemies:
     serializedVersion: 2
     m_Bits: 512
@@ -237,3 +253,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Inventory_UI: {fileID: 0}
   consumable_UI: {fileID: 0}
+  ally_UI: {fileID: 0}

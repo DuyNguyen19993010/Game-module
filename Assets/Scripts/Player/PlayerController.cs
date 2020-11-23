@@ -22,6 +22,13 @@ public class PlayerController : MonoBehaviour
     public float groundCheckRadius;
     private RaycastHit2D groundRayCast;
     public LayerMask whatIsGround;
+    //------------Used to let player a jump slightly after they are no longer grounded
+    public float hangTime = 0.2f;
+    private float hangCounter;
+    //------------Used to let player a jump slightly before they are grounded
+    public float jumpBufferLength = 0.1f;
+    private float jumpBufferCount;
+
     //-=--------------------------------Wall slide---------------------
     [Header("Wall slide")]
     public bool isLefttWalled;
@@ -58,14 +65,15 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         speed = 1.0f;
-        jumpHeight = 145.0f;
+        jumpHeight = 3.0f;
         facingRight = true;
         groundCheckRadius = 0.16f;
-        wallCheckRadius = 0.09f;
+        wallCheckRadius = 0.07f;
         wallSlideSpeed = 0.1f;
         canMove = true;
         dashTime = 0.2f;
         dashSpeed = 5;
+
 
         distanceBetweenImages = 0.1f;
         dashCoolDown = 2.5f;
@@ -77,44 +85,59 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         RayCastDebug();
-        checkGround();
-        wallCheck();
-        wallJump();
-        CheckDash();
-        checkFacingDirection();
         //check if can move
         if (canMove)
         {
-            //check input
-            movement = new Vector2(Input.GetAxisRaw("Horizontal") * speed, rb.velocity.y);
-
+            //Check ground time to let player jump before grounded
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                jumpBufferCount = jumpBufferLength;
+            }
+            else
+            {
+                jumpBufferCount -= Time.deltaTime;
+            }
+            //Check how long has been ungrounded to let the player jump
+            if (isGrounded)
+            {
+                hangCounter = hangTime;
+            }
+            else
+            {
+                hangCounter -= Time.deltaTime;
+            }
+            Jump();
         }
-        animator.SetFloat("Speed", Mathf.Abs(movement.x));
+        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
 
 
     }
     void FixedUpdate()
     {
+        checkFacingDirection();
+        CheckDash();
+        wallCheck();
+        wallJump();
+        checkGround();
         if (canMove)
         {
-            movePlayer(movement);
-            wallSlide();
+            movePlayer();
             Dash();
-            StartCoroutine(Jump());
+            wallSlide();
         }
     }
-    void movePlayer(Vector2 my_movement)
+    void movePlayer()
     {
-        rb.velocity = my_movement;
+        rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * speed, rb.velocity.y);
+        Debug.Log(rb.velocity.x);
     }
-    IEnumerator Jump()
+    void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (jumpBufferCount >= 0f && hangCounter > 0f)
         {
-            rb.AddForce(new Vector2(rb.velocity.x, jumpHeight));
+            rb.velocity = Vector2.up * jumpHeight;
+            jumpBufferCount = 0;
         }
-        yield return new WaitForSeconds(0.01f);
-
     }
     void wallSlide()
     {
@@ -154,18 +177,20 @@ public class PlayerController : MonoBehaviour
         if (isRighttWalled && Input.GetKeyDown(KeyCode.Space) && !isGrounded)
         {
             rb.AddForce(new Vector2(-10, 2), ForceMode2D.Impulse);
+            animator.SetBool("isWallSliding", false);
         }
         if (isLefttWalled && Input.GetKeyDown(KeyCode.Space) && !isGrounded)
         {
 
             rb.AddForce(new Vector2(10, 2), ForceMode2D.Impulse);
+            animator.SetBool("isWallSliding", false);
         }
     }
     void wallCheck()
     {
         wallRightRayCast = Physics2D.Raycast(transform.position, Vector2.right, wallCheckRadius, whatIsWall);
         wallLeftRayCast = Physics2D.Raycast(transform.position, Vector2.left, wallCheckRadius, whatIsWall);
-        if (wallRightRayCast.collider != null && !isGrounded)
+        if (wallRightRayCast.collider != null && !isGrounded && Input.GetKey(KeyCode.D))
         {
             isRighttWalled = true;
 
@@ -176,7 +201,7 @@ public class PlayerController : MonoBehaviour
             isRighttWalled = false;
         }
 
-        if (wallLeftRayCast.collider != null && !isGrounded)
+        if (wallLeftRayCast.collider != null && !isGrounded && Input.GetKey(KeyCode.A))
         {
             isLefttWalled = true;
         }
@@ -184,6 +209,15 @@ public class PlayerController : MonoBehaviour
         {
 
             isLefttWalled = false;
+        }
+        if (isLefttWalled || isRighttWalled)
+        {
+            animator.SetBool("isWallSliding", true);
+
+        }
+        else
+        {
+            animator.SetBool("isWallSliding", false);
         }
 
     }
@@ -260,7 +294,7 @@ public class PlayerController : MonoBehaviour
                 UnFreezePlayer();
 
             }
-            StartCoroutine(Jump());
+            Jump();
 
 
 

@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -154,7 +154,6 @@ MonoBehaviour:
     type: 3}
   IndicatorPrefab: {fileID: 2323579079936068893, guid: 7bd3c338762c77a46b4a930d14502744,
     type: 3}
-  ground: {fileID: 0}
   TornadoPos: {x: 0, y: 0}
 --- !u!95 &6143030320649924715
 Animator:
