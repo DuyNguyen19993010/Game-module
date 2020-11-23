@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8176264455230837847}
   - component: {fileID: 8176264455230837844}
   - component: {fileID: 2866592851044625573}
+  - component: {fileID: 6653219274534728316}
   m_Layer: 10
   m_Name: Player 1
   m_TagString: Player
@@ -167,6 +168,8 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
+  hangTime: 0.2
+  jumpBufferLength: 0.1
   isLefttWalled: 0
   isRighttWalled: 0
   wallCheckRadius: 0
@@ -254,3 +257,16 @@ MonoBehaviour:
   Inventory_UI: {fileID: 0}
   consumable_UI: {fileID: 0}
   ally_UI: {fileID: 0}
+--- !u!114 &6653219274534728316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176264455230837804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e00a2f7a903ab648ac4f9bf0e6bdeeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  running: {fileID: 0}

@@ -128,6 +128,7 @@ public class PlayerController : MonoBehaviour
     }
     void movePlayer()
     {
+
         rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * speed, rb.velocity.y);
         Debug.Log(rb.velocity.x);
     }
@@ -325,6 +326,11 @@ public class PlayerController : MonoBehaviour
 
     //------------------------------MOVEMENT METHODS---------------------------------
 
+
+    void playRunningSound()
+    {
+
+    }
 
 
 }
