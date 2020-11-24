@@ -23,7 +23,9 @@ public class EnemyMovement : MonoBehaviour
     [Header("Check if the enemy is allowed to move")]
     //-------------------------check if the enemy is allowed to move
     public bool canMove;
-    [Header("Obstacle detect radius")]
+    [Header("Check if is in attack range")]
+    //-----------------------------------Check if is in attack rang---------------
+    public bool isInAttackRange;
     //----------------------------------RayCast---------------------------------
     public LayerMask whatIsWall;
     public float wallDetectRadius;
@@ -42,6 +44,7 @@ public class EnemyMovement : MonoBehaviour
         detectRadius = 0.5f;
         followingPlayer = false;
         wallDetectRadius = 0.19f;
+        isInAttackRange = false;
         ledgeDetectRadius = 0.21f;
         wallDetectHeight = 0.05f;
         attackRangeOffSet = 0.3f;
@@ -91,10 +94,11 @@ public class EnemyMovement : MonoBehaviour
                         direction = -1;
                     }
                     rb.velocity = new Vector2(direction * speed * Time.deltaTime, rb.velocity.y);
-
+                    isInAttackRange = false;
                 }
                 else
                 {
+
                     if (playerdDistance < 0 && facingRight)
                     {
                         facingRight = !facingRight;
@@ -109,6 +113,7 @@ public class EnemyMovement : MonoBehaviour
                         Scaler.x *= -1;
                         transform.localScale = Scaler;
                     }
+                    isInAttackRange = true;
                     rb.velocity = new Vector2(0, 0);
                     isMoving = false;
                 }
@@ -116,6 +121,7 @@ public class EnemyMovement : MonoBehaviour
             else
             {
                 isMoving = true;
+                isInAttackRange = false;
             }
 
         }

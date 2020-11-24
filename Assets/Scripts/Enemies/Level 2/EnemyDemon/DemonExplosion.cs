@@ -10,9 +10,9 @@ public class DemonExplosion : MonoBehaviour
     private EnemyMovement movement;
     //get the playerstat
     private PlayerStat stats;
-    
 
-    
+
+
     void Start()
     {
         //initialiszing the animator, movement, playerstat
@@ -22,10 +22,12 @@ public class DemonExplosion : MonoBehaviour
         //----------------------------------------------------------------
     }
 
-    void Update(){
+    void Update()
+    {
         //disable the movement of demon and trigger the explosion animation
-        //if the enemy stops moving(which means detected player and ready for attacking)
-        if(!movement.isMoving){
+        //if the enemy is in attack range(which means detected player and ready for attacking)
+        if (movement.isInAttackRange && movement.followingPlayer)
+        {
             animator.SetBool("isRunning", false);
             //disable the moves
             movement.SendMessage("FreezeEnemy");
@@ -33,20 +35,24 @@ public class DemonExplosion : MonoBehaviour
             animator.SetTrigger("explodes");
         }
         //else keep the demon moving around
-        else{
+        else
+        {
             animator.SetBool("isRunning", true);
         }
-        
+
     }
     //-----------------------------this is getting called through the animation event----------------------------
-     void explosionDamage(){
-        if(Vector2.Distance(transform.position,GameObject.Find("Player").transform.position) < 1){
+    void explosionDamage()
+    {
+        if (Vector2.Distance(transform.position, GameObject.Find("Player").transform.position) < 1)
+        {
             stats.SendMessage("decreaseHP", 100);
         }
     }
     //-------------------------------------------------------------------------------------------------------------
     //-----------------------------this is getting called through the animation event at the end to destroy the demon enemy----------------------------
-    void destroySelf(){
+    void destroySelf()
+    {
         Destroy(gameObject);
     }
     //---------------------------------------------------------------------------------------------------------------------------
