@@ -1850,17 +1850,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: 1da75732f0042be45b963e50b3eedeb9, type: 3}
   - {fileID: 8300000, guid: f470df465b2a9e24f8cfa0f2ccd543be, type: 3}
-  - {fileID: 8300000, guid: c5b3f888ed16584449aac9a68b40edbf, type: 3}
-  - {fileID: 8300000, guid: ebc02041813c0384c8f1d13edbf45619, type: 3}
   jumps:
   - {fileID: 8300000, guid: 31d2739f23d105b499a87595b4aa2a97, type: 3}
-  - {fileID: 8300000, guid: 82769c2131335e84db9af208f502639f, type: 3}
-  - {fileID: 8300000, guid: 579eae6d52760454097d3c96c4ecc281, type: 3}
   attacks:
-  - {fileID: 8300000, guid: 2496680cc752746469571265d2063db8, type: 3}
-  - {fileID: 8300000, guid: 9c2ec082744eb584e925256eb734b9cd, type: 3}
+  - {fileID: 8300000, guid: 85d7dbe9c70e1854ebbaf874870485f7, type: 3}
 --- !u!82 &322517054
 AudioSource:
   m_ObjectHideFlags: 0
