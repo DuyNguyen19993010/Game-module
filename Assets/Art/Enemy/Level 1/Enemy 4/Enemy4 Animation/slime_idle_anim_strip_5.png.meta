@@ -1,36 +1,27 @@
 fileFormatVersion: 2
-guid: 0bde33da364a06c4ab011aca33752f33
+guid: 1c69427862fd3dc46a72999f402b648d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7441861488978599509
-    second: Attack2_0
+      213: 7038833712251867961
+    second: slime_idle_anim_strip_5_0
   - first:
-      213: 8288915215451595207
-    second: Attack2_1
+      213: 203766399223473870
+    second: slime_idle_anim_strip_5_1
   - first:
-      213: 4668938655123782945
-    second: Attack2_2
+      213: 5071028378212947155
+    second: slime_idle_anim_strip_5_2
   - first:
-      213: 5683539909772271658
-    second: Attack2_3
+      213: 690470310051290710
+    second: slime_idle_anim_strip_5_3
   - first:
-      213: 5764228812365489207
-    second: Attack2_4
-  - first:
-      213: -1191510351576865934
-    second: Attack2_5
-  - first:
-      213: -8937499057154260928
-    second: Attack2_6
-  - first:
-      213: 5293088307283036655
-    second: Attack2_7
+      213: 5367323369176836121
+    second: slime_idle_anim_strip_5_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -83,13 +74,13 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -101,43 +92,7 @@ TextureImporter:
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Windows Store Apps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Lumin
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -149,13 +104,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Attack2_0
+      name: slime_idle_anim_strip_5_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 1
         y: 0
-        width: 150
-        height: 150
+        width: 14
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,20 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aca1df161f2913d44a2623f803a3bb42
-      internalID: 7441861488978599509
+      spriteID: 93311dbc7f5fea160800000000000000
+      internalID: 7038833712251867961
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Attack2_1
+      name: slime_idle_anim_strip_5_1
       rect:
         serializedVersion: 2
-        x: 150
+        x: 17
         y: 0
-        width: 150
-        height: 150
+        width: 14
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +139,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7d70264689ddc204387285697916a4de
-      internalID: 8288915215451595207
+      spriteID: ec620e2e57ce3d200800000000000000
+      internalID: 203766399223473870
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Attack2_2
+      name: slime_idle_anim_strip_5_2
       rect:
         serializedVersion: 2
-        x: 300
+        x: 33
         y: 0
-        width: 150
-        height: 150
+        width: 14
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -205,20 +160,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e214249fea7d284da89b07af8f89d2b
-      internalID: 4668938655123782945
+      spriteID: 3d4de494179ef5640800000000000000
+      internalID: 5071028378212947155
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Attack2_3
+      name: slime_idle_anim_strip_5_3
       rect:
         serializedVersion: 2
-        x: 450
+        x: 49
         y: 0
-        width: 150
-        height: 150
+        width: 14
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -226,20 +181,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b7c27916d5a96d94c9991263bea9dc94
-      internalID: 5683539909772271658
+      spriteID: 65e9f86b61b059900800000000000000
+      internalID: 690470310051290710
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Attack2_4
+      name: slime_idle_anim_strip_5_4
       rect:
         serializedVersion: 2
-        x: 600
+        x: 65
         y: 0
-        width: 150
-        height: 150
+        width: 14
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -247,71 +202,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bdc3e7cd1a586134a9f5ee1bf89bf30b
-      internalID: 5764228812365489207
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Attack2_5
-      rect:
-        serializedVersion: 2
-        x: 750
-        y: 0
-        width: 150
-        height: 150
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 594f3a678eb775b4692758c529bf6de3
-      internalID: -1191510351576865934
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Attack2_6
-      rect:
-        serializedVersion: 2
-        x: 900
-        y: 0
-        width: 150
-        height: 150
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: efb25f969d7803340a9e0e678ea068fd
-      internalID: -8937499057154260928
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Attack2_7
-      rect:
-        serializedVersion: 2
-        x: 1050
-        y: 0
-        width: 150
-        height: 150
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7e899540f29a8ef4ab6e42e0169cf4b0
-      internalID: 5293088307283036655
+      spriteID: 918207eba209c7a40800000000000000
+      internalID: 5367323369176836121
       vertices: []
       indices: 
       edges: []
