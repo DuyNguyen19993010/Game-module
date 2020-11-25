@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
     {
 
         rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * speed, rb.velocity.y);
-        Debug.Log(rb.velocity.x);
+
     }
     void Jump()
     {

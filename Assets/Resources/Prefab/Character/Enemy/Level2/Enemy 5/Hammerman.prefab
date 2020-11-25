@@ -103,8 +103,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.038762093, y: 0}
-  m_Size: {x: 0.12833595, y: 0.29}
+  m_Offset: {x: 0.04123783, y: -0.009899795}
+  m_Size: {x: 0.1035862, y: 0.23060122}
   m_Direction: 0
 --- !u!50 &6021007106992284042
 Rigidbody2D:
@@ -162,7 +162,7 @@ MonoBehaviour:
   followingPlayer: 0
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   attackRangeOffSet: 0
   isMoving: 0
   speed: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
   isInAttackRange: 0
   whatIsWall:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   wallDetectRadius: 0
   wallDetectHeight: 0
   ledgeDetectRadius: 0

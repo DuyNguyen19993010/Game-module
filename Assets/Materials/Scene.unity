@@ -2038,6 +2038,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6021007106992284040, guid: 026e7819b04de9b40b82353666bebd90,
+        type: 3}
+      propertyPath: playerLayer.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 6021007106992284040, guid: 026e7819b04de9b40b82353666bebd90,
+        type: 3}
+      propertyPath: whatIsWall.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 6021007106992284047, guid: 026e7819b04de9b40b82353666bebd90,
         type: 3}
       propertyPath: m_LocalPosition.x
