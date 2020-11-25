@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8919906892963752943}
   - component: {fileID: 8919906892963752946}
   - component: {fileID: 8919906892963752945}
+  - component: {fileID: 6491403968492312878}
   m_Layer: 9
   m_Name: SpiritBall
   m_TagString: Enemy
@@ -149,7 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1afd0bacffd5c84782a3fda144c06fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 0}
   firepoint: {fileID: 8919906893925085492}
   shootballPrefab: {fileID: 117178260602715462, guid: c001441fc47b6e641b253d983af86b45,
     type: 3}
@@ -169,7 +169,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -191,6 +191,22 @@ CapsuleCollider2D:
   m_Offset: {x: -0.000333786, y: 0.007666856}
   m_Size: {x: 0.12599945, y: 0.1273315}
   m_Direction: 0
+--- !u!114 &6491403968492312878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8919906892963752939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda8be78e8a25e4499048e6c820fb3b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemymovement: {fileID: 0}
+  currentHP: 0
+  maxHP: 0
+  maxHP_temp: 0
 --- !u!1 &8919906893925085491
 GameObject:
   m_ObjectHideFlags: 0
