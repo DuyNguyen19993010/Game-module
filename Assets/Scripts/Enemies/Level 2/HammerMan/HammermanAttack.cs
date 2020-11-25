@@ -27,35 +27,52 @@ public class HammermanAttack : MonoBehaviour
         // start attack actions
         if(movement.isInAttackRange && Attacking == false){
             Attacking = true;
-           // movement.canMove = false;
-            Stage1();
+            //movement.SendMessage("FreezeEnemy");
+            // movement.canMove = false;
+            StartCoroutine(Stage1(1.5f));
         }
     }
     // first stage action of the attack, lift the hammer up
-    void Stage1(){
-        animator.SetTrigger("lift");
+    /* void Stage1(){
+        animator.SetBool("lift",true);
         
-    }
+    } */
     //second stage action of the attack, slam the hammer
-    void Stage2(){
+    /* void Stage2(){
+        animator.SetBool("lift",false);
         animator.SetTrigger("slam");
-    }
+    } */
     //----animation event that after lift the hammer,goes to stage2 after 1.5s
-    void ReadyStage2(){
+    /* void ReadyStage2(){
         Invoke("Stage2",1.5f);
-    }
+    } */
     //----animation event that after slam the hammer, detect if the player is hitted in the attackRange
     void DamagePlayer(){
         Collider2D [] playerhitted = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerlayer); //capture objects hitted that is player layer in the attackRange
         //if it is not null then hurt the player 
-        if(playerhitted != null){
+        if(playerhitted != null){  
             foreach(Collider2D players in playerhitted){
                 players.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP",100);
             }
         }
         Attacking = false; // set attacking to false so ready to do next attack
+        //movement.SendMessage("UnFreezeEnemy");
         
         //movement.canMove = true;
+    }
+    private IEnumerator Stage1(float waitTime)
+    {
+            animator.SetBool("lift",true);
+            yield return new WaitForSeconds(waitTime);
+            if(Vector2.Distance(transform.position, GameObject.Find("Player").transform.position) < 0.2){
+                animator.SetTrigger("slam");
+            }
+            else{
+                animator.SetBool("lift",false);
+                Attacking = false;
+            }
+            
+    
     }
 
     //Debug with the attack range
@@ -65,4 +82,10 @@ public class HammermanAttack : MonoBehaviour
         }
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
+    void freeze(){
+        movement.SendMessage("FreezeEnemy");
+    }
+    void unFreeze(){
+        movement.SendMessage("UnFreezeEnemy");
+    } 
 }
