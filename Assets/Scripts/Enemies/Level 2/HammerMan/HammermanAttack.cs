@@ -6,11 +6,13 @@ public class HammermanAttack : MonoBehaviour
 {
     public EnemyMovement movement;  //get the enemymovement script
     private Animator animator;
+    private EnemyStat enemyStat;//Get enemy's stat to get their damage output
     public Transform attackPoint;   //get attackpoint
     public float attackRange = 0.5f; //attack range of the hammerman
     public LayerMask playerlayer;
     void Start()
     {
+        enemyStat = gameObject.GetComponent<EnemyStat>();
         movement = gameObject.GetComponent<EnemyMovement>();
         animator = gameObject.GetComponent<Animator>();
 
@@ -21,7 +23,7 @@ public class HammermanAttack : MonoBehaviour
     {
         if (movement.isInAttackRange && movement.followingPlayer)
         {
-            Debug.Log("In range");
+
             PerformAttack();
         }
     }
@@ -34,7 +36,7 @@ public class HammermanAttack : MonoBehaviour
         {
             foreach (Collider2D players in playerhitted)
             {
-                players.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", 100);
+                players.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", enemyStat.damage);
             }
         }
 

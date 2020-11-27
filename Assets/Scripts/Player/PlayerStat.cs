@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerStat : MonoBehaviour
 {
-    //---------------------------Player ------------------------------
+    //---------------------------Player instance ------------------------------
     public Player player;
     //animator
     private Animator animator;
@@ -18,8 +18,16 @@ public class PlayerStat : MonoBehaviour
     [Header("Current stat")]
     public float currentHP;
     public float Rage;
-    public PlayerController playermovement;
+    //Check if rage mode is activated or not
+    public bool isRaging;
+    //Get playermovement
+    private PlayerController playermovement;
+    //Check if player can be hurt
+    [Header("Can be hurt or not")]
     public bool canBeHurt;
+    //Check if player is in parry state
+    private bool isParrying;
+    private bool canParry;
 
     // Start is called before the first frame update
     void Start()
@@ -29,14 +37,45 @@ public class PlayerStat : MonoBehaviour
         maxHP = player.maxHP;
         maxRage = player.maxRage;
         damage = player.damage;
-        currentHP = maxHP;
-        Rage = 0;
+        currentHP = maxRage;
+        Rage = maxRage;
+        isRaging = false;
         animator = gameObject.GetComponent<Animator>();
         playermovement = gameObject.GetComponent<PlayerController>();
+        isParrying = false;
+        canParry = true;
 
     }
     void Update()
     {
+        //--------------If rage mode is activate ,decrease it over time---------
+        if (isRaging)
+        {
+            Rage -= Time.deltaTime;
+            if (Rage <= 0)
+            {
+                //Deactivate Rage mode
+                Rage = 0;
+                isRaging = false;
+                damage -= 3;
+                Debug.Log("Ragemode deactivated");
+            }
+        }
+        //--------------Activate Ragemode---------
+        if (Input.GetKeyDown(KeyCode.R) && Rage == maxRage)
+        {
+            //Activate Rage mode
+            isRaging = true;
+            damage += 3;
+        }
+        if (canParry)
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                StartCoroutine(Parry());
+
+            }
+        }
     }
     // Update is called once per frame
 
@@ -54,22 +93,25 @@ public class PlayerStat : MonoBehaviour
 
     void decreaseHP(float damage)
     {
-
-
         if (canBeHurt)
         {
-            Debug.Log("Hurt");
-            // Play hurt animation
-            currentHP -= damage;
-            if (currentHP <= 0)
+            if (isParrying)
             {
-                currentHP = 0;
-                //PLay death animation
+                Debug.Log("-------------------No damage taken----------------");
+
+            }
+            else
+            {
+                animator.SetTrigger("hurt");
+                // Play hurt animation
+                currentHP -= damage;
+                if (currentHP <= 0)
+                {
+                    currentHP = 0;
+                    //PLay death animation
+                }
             }
         }
-
-
-        // HP -= damage;
 
     }
     void increaseDamage(float amount)
@@ -82,7 +124,11 @@ public class PlayerStat : MonoBehaviour
     }
     void increaseRage(float amount)
     {
-        Rage += amount;
+        if (!isRaging)
+        {
+            damage += 3;
+        }
+
     }
     void decreaseRage(float amount)
     {
@@ -119,6 +165,35 @@ public class PlayerStat : MonoBehaviour
         maxRage_temp += amount;
         maxHP += amount;
 
+    }
+    //--------------Set the player state to parrying,meaning wont take damage and will deflect enemy attack
+    IEnumerator Parry()
+    {
+        //-----------------Disable parry ability because player is using it------
+        canParry = false;
+        playermovement.SendMessage("FreezePlayer");
+        yield return new WaitForSeconds(0.05f);
+        //-----------------Start parrying duration------
+        StartParry();
+        yield return new WaitForSeconds(1f);
+        //-----------------End parrying duration and let player parry again------
+        StopParry();
+        playermovement.SendMessage("UnFreezePlayer");
+        canParry = true;
+    }
+    void StartParry()
+    {
+        isParrying = true;
+    }
+    void StopParry()
+    {
+        isParrying = false;
+
+    }
+
+    void ShakeCamera()
+    {
+        CameraShake.Instance.ShakeCamera(0.2f, .1f);
     }
 
 

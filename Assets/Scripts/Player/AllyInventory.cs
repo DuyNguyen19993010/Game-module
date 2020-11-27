@@ -10,7 +10,6 @@ public class AllyInventory
         ally = new List<Item>();
         AddAlly(new shiroinu());
         AddAlly(new kuroinu());
-        Debug.Log(ally.Count);
     }
     public void AddAlly(Item item)
     {

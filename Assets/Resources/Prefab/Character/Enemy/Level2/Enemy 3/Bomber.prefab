@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 3616942071639679034}
   - component: {fileID: 3616942071639679029}
   - component: {fileID: 3616942071639679028}
-  - component: {fileID: 3616942071639679038}
   - component: {fileID: 3616942071639679033}
   - component: {fileID: 3616942071639679032}
   - component: {fileID: 3616942071639679035}
+  - component: {fileID: 5465122959487247545}
   m_Layer: 9
   m_Name: Bomber
   m_TagString: Enemy
@@ -108,22 +108,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3616942071639679038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3616942071639679031}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eda8be78e8a25e4499048e6c820fb3b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemymovement: {fileID: 0}
-  currentHP: 0
-  maxHP: 0
-  maxHP_temp: 0
 --- !u!50 &3616942071639679033
 Rigidbody2D:
   serializedVersion: 4
@@ -158,8 +142,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.08, y: 0.21}
+  m_Offset: {x: 0.01249649, y: 0.007497728}
+  m_Size: {x: 0.05500702, y: 0.19500452}
   m_Direction: 0
 --- !u!114 &3616942071639679035
 MonoBehaviour:
@@ -177,6 +161,26 @@ MonoBehaviour:
   BombPrefab: {fileID: 4980478379873639475, guid: 6baea28460008c247b5b6479f38e7733,
     type: 3}
   nextAttack: 0
+--- !u!114 &5465122959487247545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3616942071639679031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda8be78e8a25e4499048e6c820fb3b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 0
+  enemymovement: {fileID: 0}
+  currentHP: 0
+  maxHP: 0
+  maxHP_temp: 0
+  damage: 0
+  enemyRef: {fileID: 3616942071639679031}
+  enemyPosition: {x: 0, y: 0}
 --- !u!1 &3616942072802861116
 GameObject:
   m_ObjectHideFlags: 0

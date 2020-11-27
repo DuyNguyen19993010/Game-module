@@ -23,8 +23,6 @@ public class HealthBar : MonoBehaviour
                 transform.GetChild(i).GetComponent<HealtIconBehaviour>().PlayDestroyAnimation();
 
             }
-
-            Debug.Log("rendered");
             for (int i = 0; i < playerStat.currentHP; i++)
             {
                 Instantiate(healthIcon, transform);

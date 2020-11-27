@@ -22,7 +22,6 @@ public class RageMeter : MonoBehaviour
 
         if (slider.value != playerStat.Rage)
         {
-            Debug.Log("Not current health");
             slider.value = playerStat.Rage;
         }
 

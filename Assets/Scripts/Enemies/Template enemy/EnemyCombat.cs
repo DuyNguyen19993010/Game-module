@@ -90,7 +90,7 @@ public class EnemyCombat : MonoBehaviour
                 if (attackRayCast.collider != null)
                 {
                     //Attack player
-                    attackRayCast.collider.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", damage);
+                    attackRayCast.collider.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", enemyStat.damage);
                 }
             }
             catch

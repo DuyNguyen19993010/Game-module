@@ -17,6 +17,8 @@ TagManager:
   - Indicator
   - Boss
   - AmountText
+  - Level_1_spirit_door
+  - Level_2_spirit_door
   layers:
   - Default
   - TransparentFX

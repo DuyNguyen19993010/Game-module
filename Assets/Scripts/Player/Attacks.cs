@@ -63,6 +63,7 @@ public class Attacks : MonoBehaviour
     public bool canBeDamaged;
     public bool canMove;
 
+
     //------------------------------------------Rage mode------------------
     private bool RageMode;
     private bool canAttack;
@@ -76,7 +77,6 @@ public class Attacks : MonoBehaviour
         fire_skill_nextUseTime = 0;
         wind_skill_nextUseTime = 0;
         slamRadius = 0.4f;
-        isDiving = false;
         diveForce = 30;
         moon_skill_nextUseTime = 0;
         isSpining = false;
@@ -100,15 +100,8 @@ public class Attacks : MonoBehaviour
         {
             //Combo
             Combo();
-
-
             //Jump down attack
             JumpAttack();
-
-
-
-            //Parry
-
 
             //---------------------------Skills-------------------------------------
             //Fire Skill
@@ -131,7 +124,7 @@ public class Attacks : MonoBehaviour
 
         }
     }
-    void UnlockMoonSkill(int index)
+    void UnlockSkill(int index)
     {
         playerstat.player.skills.GetSkillList()[index].enabled = true;
         GameObject.Find("Skill_Cooldown_Container").GetComponent<Skill_UI>().refresh = true;
@@ -183,6 +176,7 @@ public class Attacks : MonoBehaviour
             {
                 enemy.collider.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage);
                 playerstat.SendMessage("increaseRage", 1);
+                ShakeCamera();
                 Debug.Log(enemy.collider.GetComponent<EnemyStat>().currentHP);
             }
         }
@@ -258,8 +252,11 @@ public class Attacks : MonoBehaviour
         }
         if (isSpining)
         {
+            playerstat.canBeHurt = false;
+
             yield return new WaitForSeconds(5.0f);
             isSpining = false;
+            playerstat.canBeHurt = true;
             UsingMoonSKill();
             yield return new WaitForSeconds(0.1f);
             animator.SetBool("Moon_Skill_Spin", false);
@@ -267,6 +264,27 @@ public class Attacks : MonoBehaviour
         }
 
     }
+    IEnumerator SpinAttack()
+    {
+        while (isSpining)
+        {
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 0.1f, enemies);
+            try
+            {
+                foreach (Collider2D enemy in hitEnemies)
+                {
+                    enemy.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage / 3);
+                    ShakeCamera();
+                }
+            }
+            catch
+            {
+                Debug.Log("Null");
+            }
+        }
+        yield return new WaitForSeconds(0f);
+    }
+
 
     void UsingMoonSKill()
     {
@@ -281,18 +299,18 @@ public class Attacks : MonoBehaviour
     //Wind Skill
     void WindSkill()
     {
-        if (Input.GetKeyDown(KeyCode.K) && !playermovement.isGrounded && Time.time > wind_skill_nextUseTime)
-        {
-            animator.SetTrigger("Wind_skill");
-        }
-        if (isDiving)
-        {
-            Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(transform.position, slamRadius, enemies);
-            foreach (Collider2D enemy in hitEnemy)
-            {
-                enemy.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage);
-            }
-        }
+        // if (Input.GetKeyDown(KeyCode.K) && !playermovement.isGrounded && Time.time > wind_skill_nextUseTime)
+        // {
+        //     animator.SetTrigger("Wind_skill");
+        // }
+        // if (isDiving)
+        // {
+        //     Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(transform.position, slamRadius, enemies);
+        //     foreach (Collider2D enemy in hitEnemy)
+        //     {
+        //         enemy.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage);
+        //     }
+        // }
 
     }
     void Diving()
@@ -341,74 +359,6 @@ public class Attacks : MonoBehaviour
         moon_skill_nextUseTime = Time.time + moon_skill_cooldown;
     }
 
-    //----------------------------------------- Parry------------------------------------------------------
-
-    void Parry()
-    {
-        // gameObject.GetComponent<PlayerController>().SendMessage("setMoving", true);
-        // //Get user parry time
-        // if (transform.localScale.x < 0)
-        // {
-        //     gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(-30, 0);
-        // }
-        // else
-        // {
-        //     gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(30, 0);
-        // }
-        // Debug.Log(hitEnemies.Length);
-        // try
-        // {
-        //     foreach (Collider2D enemy in hitEnemies)
-        //     {
-        //         try
-        //         {
-        //             // enemy.transform.GetComponent<EnemyCombat>().SendMessage("SetPlayerAttackTime", userDetail);
-        //         }
-        //         catch { }
-
-        //     }
-        // }
-        // catch
-        // {
-        //     Debug.Log("Exception NUll for player:");
-        // }
-        // try
-        // {
-        //     foreach (Collider2D boss in hitBoss)
-        //     {
-        //         try
-        //         {
-        //             // boss.transform.GetComponent<BossCombat>().SendMessage("SetPlayerAttackTime", userDetail);
-        //         }
-        //         catch { }
-        //     }
-        // }
-        // catch
-        // {
-        //     Debug.Log("Exception NUll for player:");
-        // }
-        // gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-        // canAttack = true;
-
-    }
-    //-----------------------------------------------------------------Rage mode--------------------------------------------------------
-
-    // public void EnterRageMode()
-    // {
-    //     playerstat.SendMessage("decreaseHP", playerstat.currentHP * 60 / 100);
-    //     weaponHolder.GetComponent<WeaponHolder>().SendMessage("setRage", true);
-    //     RageParticle.Play();
-    //     attackDamage += attackDamage * 0.5f;
-    //     StartCoroutine(DecreaseRage());
-
-    // }
-    // IEnumerator DecreaseRage()
-    // {
-    //     yield return new WaitForSeconds(10.0f);
-    //     weaponHolder.GetComponent<WeaponHolder>().SendMessage("setRage", false);
-    //     playerstat.GetComponent<PlayerStat>().SendMessage("resetRage");
-    //     attackDamage -= attackDamage * 0.5f;
-    // }
     //Used to damage the player
     IEnumerator Damage(float damage)
     {
@@ -459,5 +409,15 @@ public class Attacks : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, slamRadius);
         }
+        if (isSpining)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, 0.1f);
+        }
+    }
+    //Shake camera
+    void ShakeCamera()
+    {
+        CameraShake.Instance.ShakeCamera(0.2f, .1f);
     }
 }

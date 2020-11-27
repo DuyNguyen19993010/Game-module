@@ -46,6 +46,7 @@ public class FireSlash : MonoBehaviour
         if (other.tag == "Enemy")
         {
             other.GetComponent<EnemyStat>().SendMessage("decreaseHP", 10);
+            CameraShake.Instance.ShakeCamera(0.2f, .1f);
 
             GameObject spawnedPillar = Instantiate(firePillar, new Vector2(other.transform.position.x, (other.transform.position.y) - 0.02f - other.GetComponent<SpriteRenderer>().bounds.size.y / 2), Quaternion.identity) as GameObject;
 

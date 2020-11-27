@@ -234,14 +234,14 @@ public class EnemyMovement : MonoBehaviour
         {
             facingRight = !facingRight;
             Vector3 Scaler = transform.localScale;
-            Scaler.x *= -1;
+            Scaler.x = Mathf.Abs(Scaler.x);
             transform.localScale = Scaler;
         }
         else if (rb.velocity.x < 0.0 && facingRight)
         {
             facingRight = !facingRight;
             Vector3 Scaler = transform.localScale;
-            Scaler.x *= -1;
+            Scaler.x = -Mathf.Abs(Scaler.x);
             transform.localScale = Scaler;
         }
 

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5809757677112146685}
   - component: {fileID: 5809757677112146684}
   - component: {fileID: 5809757677112146687}
+  - component: {fileID: -1369052517935757989}
   m_Layer: 9
   m_Name: ExplodingDemon
   m_TagString: Enemy
@@ -166,6 +167,7 @@ MonoBehaviour:
   speed: 0
   direction: 0
   canMove: 0
+  isInAttackRange: 0
   whatIsWall:
     serializedVersion: 2
     m_Bits: 256
@@ -184,3 +186,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac058b37dcae3e4f9fada00aefad5a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-1369052517935757989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5809757677112146686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda8be78e8a25e4499048e6c820fb3b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 4
+  enemymovement: {fileID: 0}
+  currentHP: 0
+  maxHP: 0
+  maxHP_temp: 0
+  damage: 0
+  enemyRef: {fileID: 5809757677112146686}
+  enemyPosition: {x: 0, y: 0}
