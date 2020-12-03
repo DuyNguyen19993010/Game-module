@@ -10,11 +10,13 @@ public class Player
     public float maxRage;
     public float damage;
     public Skills skills;
-    public Player(float _maxHP, float _maxRage, float _damage)
+    public float attackDelay;
+    public Player(float _maxHP, float _maxRage, float _damage, float _atttackDelay)
     {
         maxHP = _maxHP;
         maxRage = _maxRage;
         damage = _damage;
+        attackDelay = _atttackDelay;
         skills = new Skills();
     }
 }

@@ -30,7 +30,7 @@ public class MoonBoss_Attack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        faceRight = false;  
+        faceRight = false;
         Fight = false;
         stats = GameObject.Find("Player").GetComponent<PlayerStat>();
         collideDmg = true;
@@ -50,34 +50,44 @@ public class MoonBoss_Attack : MonoBehaviour
     void Update()
     {
         //-----------------if player collides with boss, Damage player 1 hp--------------
-        if(Vector2.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().position) < 0.05 && collideDmg){
-            stats.SendMessage("decreaseHP", 1);     //damage active
-            //---------------disable collide damage with 2s, so player won't get hurt multiple times----------------
-            collideDmg = false;     
-            Invoke("canbeCollide",2);
-            //------------------------------------------------------------------------------------------------------
+        try
+        {
+            if (Vector2.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().position) < 0.05 && collideDmg)
+            {
+                stats.SendMessage("decreaseHP", 1);     //damage active
+                                                        //---------------disable collide damage with 2s, so player won't get hurt multiple times----------------
+                collideDmg = false;
+                Invoke("canbeCollide", 2);
+                //------------------------------------------------------------------------------------------------------
+            }
         }
-        if(Fight){  //if player enter the room
-        //-----------------------start the battle only once, so won't call attacks every frame-----------------
-            if(!Attacking){
+        catch { }
+        if (Fight)
+        {  //if player enter the room
+           //-----------------------start the battle only once, so won't call attacks every frame-----------------
+            if (!Attacking)
+            {
                 startSpinAttack();  //start spin attack
                 Attacking = true;
-        
+
             }
-        //-------------------------------------------------------------------------------------------------------
-            if(spinMove){   //if boss is spinning
+            //-------------------------------------------------------------------------------------------------------
+            if (spinMove)
+            {   //if boss is spinning
                 collideDmg = false;     //disable collide damage to avoid damage player two times(once spin, once collide)
                 spinDmg();      //check if can deal spin damage
                 checkWall();    //wall checking
                 //----------if boss is on a set position which is left hand side of the room--------------------
-                if(Mathf.Abs(transform.position.x - 59.30f) <0.1 && faceRight){
+                if (Mathf.Abs(transform.position.x - 59.30f) < 0.1 && faceRight)
+                {
                     counter += 1;   //make sure boss is still in the spinning attack
                     flip();     //change the direction of the boss is facing to right
                     rb.velocity = transform.right * 1;      //spin with speed 1
                 }
                 //----------------------------------------------------------------------------------------------
                 //----------if boss is back to the original position and it is in the spinning loop, not just start spinning--------------------
-                else if(Mathf.Abs(transform.position.x - originalPos) < 0.1 && counter != 0){
+                else if (Mathf.Abs(transform.position.x - originalPos) < 0.1 && counter != 0)
+                {
                     spinMove = false;   //finish spining
                     collideDmg = true;  //enable collide damage
                     rb.velocity = new Vector2(0, 0);    //disable move of the boss
@@ -86,46 +96,54 @@ public class MoonBoss_Attack : MonoBehaviour
                 }
                 //-------------------------------------------------------------------------------------------------------------------------------
                 //-----------if boss just start spin, so the first spin------------------------------------------
-                else if(counter == 0){
+                else if (counter == 0)
+                {
                     rb.velocity = transform.right * 1;  //spin to the left because flip changed the direction of the boss facing
                 }
                 //------------------------------------------------------------------------------------------------
             }
             //---------if boss is in the air----------
-            if(jumpMove){
-                transform.position = Vector2.MoveTowards(transform.position, jumpAttackTarget, 1.5f*Time.deltaTime);    // move to the jumAttackTarget position
-                if(Mathf.Abs(transform.position.x - jumpAttackTarget.x) < 0.1){     // when boss is close enough to the target
+            if (jumpMove)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, jumpAttackTarget, 1.5f * Time.deltaTime);    // move to the jumAttackTarget position
+                if (Mathf.Abs(transform.position.x - jumpAttackTarget.x) < 0.1)
+                {     // when boss is close enough to the target
                     jumpMove = false;   //set to false
-                    animator.SetBool("InAir",false);    //start the jumpAttack anmiation
+                    animator.SetBool("InAir", false);    //start the jumpAttack anmiation
                 }
             }
-            
+
         }
     }
     //---------------------fliping boss-------------------------
-    void flip(){
+    void flip()
+    {
         faceRight = !faceRight;
-        transform.Rotate(0f,180f,0f);
+        transform.Rotate(0f, 180f, 0f);
     }
     //-----------------------------------------------------------
     //---------------------start the battle----------------------
-    void startFight(){
+    void startFight()
+    {
         Fight = true;
     }
     //----------------------------------------------------------
     //----------------------start spin animation----------------------
-    void startSpinAttack(){
+    void startSpinAttack()
+    {
         animator.SetTrigger("StartSpin");
     }
     //----------------------------------------------------------------
     //----------------------Animation event triggered when starSpin animation finished-----------
-    void spinAttack(){
-        animator.SetBool("SpinAttack",true);
+    void spinAttack()
+    {
+        animator.SetBool("SpinAttack", true);
         spinMove = true;    //boss is spinning
-    } 
+    }
     //-------------------------------------------------------------------------------------------
     //----------------------Spin damage-----------------------------------
-    void spinDmg(){
+    void spinDmg()
+    {
         if (Vector2.Distance(transform.position, GameObject.Find("Player").transform.position) < 0.2 && hurtBySpin) //if player is in range and have not been hurt by the spin yet
         {
             stats.SendMessage("decreaseHP", stats.damage);  //hurt player
@@ -134,40 +152,48 @@ public class MoonBoss_Attack : MonoBehaviour
     }
     //-------------------------------------------------------------------
     //------------------------Stop spin attack and start jump attack-------------------------
-    void stopSpinAttack(){
-        animator.SetBool("SpinAttack",false);   //play the finish spin animation
+    void stopSpinAttack()
+    {
+        animator.SetBool("SpinAttack", false);   //play the finish spin animation
         hurtBySpin = true;  // can be hurt by spin again as the loop finished
         counter = 0;    //set loop counter to 0
         jumpAttack();   //start jump attack
     }
 
     //------------------------Start jump attack------------------------------------------
-    void jumpAttack(){
+    void jumpAttack()
+    {
         jumpAttackTarget = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().position;   // locate where the player is
-        if(Vector2.Distance(transform.position , jumpAttackTarget) < 0.5){  //if player is too close to the boss, do the spin attack instead of jump attack
+        if (Vector2.Distance(transform.position, jumpAttackTarget) < 0.5)
+        {  //if player is too close to the boss, do the spin attack instead of jump attack
             startSpinAttack();
         }
-        else{
+        else
+        {
             animator.SetTrigger("StartJump");   //do the start jump animation
             //---------------------------make sure boss is facing to the player--------------------------------------------------------
-            if(transform.position.x - GameObject.Find("Player").transform.position.x > 0 && !faceRight){
+            if (transform.position.x - GameObject.Find("Player").transform.position.x > 0 && !faceRight)
+            {
                 flip();
             }
-            else if(transform.position.x - GameObject.Find("Player").transform.position.x < 0 && faceRight){
+            else if (transform.position.x - GameObject.Find("Player").transform.position.x < 0 && faceRight)
+            {
                 flip();
             }
         }
-        
+
     }
     //--------------------Animation event that be called when startJump animation finished--------------------
-    void jump(){
-        animator.SetBool("InAir",true); //play jump animation
+    void jump()
+    {
+        animator.SetBool("InAir", true); //play jump animation
         rb.velocity = Vector2.up * 3f;  //jump
         jumpMove = true;    //boss is jumping
     }
     //---------------------------------------------------------------------------------------------------
     //--------------------------------Animation event that be called when boss slam the hammer-----------------------------
-    void jumpAttackDmg(){
+    void jumpAttackDmg()
+    {
         collideDmg = false; //disable collide damge
         if (Vector2.Distance(transform.position, GameObject.Find("Player").transform.position) < 0.15)  //if player is in the attack range damge player
         {
@@ -177,15 +203,18 @@ public class MoonBoss_Attack : MonoBehaviour
     }
     //-----------------------------------------------------------------------------------------------------------------------
     //--------------------------------Check if there is a wall in front of boss using raycast----------------------------------
-    void checkWall(){
-        wallCheck = Physics2D.Raycast(transform.position, transform.right ,wallDetectRadius,walllayer);
-        if(wallCheck.collider != null){
+    void checkWall()
+    {
+        wallCheck = Physics2D.Raycast(transform.position, transform.right, wallDetectRadius, walllayer);
+        if (wallCheck.collider != null)
+        {
             flip(); //if there is wall, flip the boss
         }
     }
     //----------------------------------------------------------------------------------------------------------------------
     //------------------Collide damge controller---------------------
-    void canbeCollide(){
+    void canbeCollide()
+    {
         collideDmg = true;
     }
 }

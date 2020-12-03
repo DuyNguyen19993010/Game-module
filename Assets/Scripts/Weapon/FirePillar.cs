@@ -9,7 +9,7 @@ public class FirePillar : MonoBehaviour
     private float disapearTime;
     void Start()
     {
-        lastingTime = 10;
+        lastingTime = 1;
         disapearTime = Time.time + lastingTime;
     }
 
@@ -22,9 +22,13 @@ public class FirePillar : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Enemy")
-        {
-            other.GetComponent<EnemyStat>().SendMessage("decreaseHP", 10);
-        }
+        try{
+            if (other.tag == "Enemy")
+            {
+                
+                other.GetComponent<EnemyStat>().SendMessage("decreaseHP", 10);
+            }
+        }catch{}
+        
     }
 }

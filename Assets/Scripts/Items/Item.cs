@@ -19,6 +19,19 @@ public abstract class Item
     {
         max += _amouunt;
     }
+    void increaseAmount()
+    {
+        amount += 1;
+        if (amount > max)
+        {
+            amount = max;
+
+        }
+    }
+    public void resetAmount()
+    {
+        amount = max;
+    }
     public void decreaseAmount()
     {
         if (amount - 1 >= 0)

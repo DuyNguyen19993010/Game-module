@@ -10,7 +10,7 @@ public class Attacks : MonoBehaviour
     private int comboIndex = 0;
     private float nextAttackTime = 0;
     private float lastAttackTime = 0;
-    private float comboDelay = 0.5f;
+    // public float comboDelay;
     public float basic_attack_radius = 0.5f;
     //--------------------------------------------Jump down attack-------------------------------
     [Header("Jump attack hit box's size and position")]
@@ -39,15 +39,15 @@ public class Attacks : MonoBehaviour
     public float moon_skill_cooldown;
     private bool isSpining;
 
-    [Header("Wind SKill")]
-    //Wind Skill
-    public bool isUsingWindSkill;
-    public float wind_skill_nextUseTime;
-    public float wind_skill_cooldown;
-    private bool isDiving;
-    public float slamRadius;
-    public float diveForce;
-
+    //-------------------------------------Ally skill cooldown------------
+    [Header("Ally skill cooldown")]
+    public float shiroinu_cooldown;
+    public float shiroinu_nextUseTime;
+    public float kuroinu_cooldown;
+    public float kuroinu_nextUseTime;
+    //------------------------Ally prefab ----------------------------
+    public GameObject shiroinuPrefab;
+    public GameObject kuroinuPrefab;
     //----------------------------------Detect Layermask/self Rigidbody/Effect--------------------------------------
     [Header("Enemy layers")]
     public LayerMask enemies;
@@ -62,34 +62,40 @@ public class Attacks : MonoBehaviour
     [Header("Check if can be damaged or moved")]
     public bool canBeDamaged;
     public bool canMove;
-
-
     //------------------------------------------Rage mode------------------
     private bool RageMode;
     private bool canAttack;
 
 
-    void Awake()
+    void Start()
     {
-        canAttack = true;
-        canBeDamaged = true;
-        basic_attack_radius = 0.23f;
-        fire_skill_nextUseTime = 0;
-        wind_skill_nextUseTime = 0;
-        slamRadius = 0.4f;
-        diveForce = 30;
-        moon_skill_nextUseTime = 0;
-        isSpining = false;
-        fire_skill_cooldown = 3;
-        wind_skill_cooldown = 3;
-        moon_skill_cooldown = 3;
-        JumpAttackBox = new Vector2(0.11f, 0.30f);
+        //-------------------------Set up for enemy layers
         enemies = LayerMask.GetMask("Enemy");
         bosses = LayerMask.GetMask("Boss");
         playerstat = gameObject.GetComponent<PlayerStat>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
         playermovement = gameObject.GetComponent<PlayerController>();
+        shiroinuPrefab = (GameObject)Resources.Load("Prefab/Character/Ally/Shiroinu", typeof(GameObject));
+        kuroinuPrefab = (GameObject)Resources.Load("Prefab/Character/Ally/Kuroinu", typeof(GameObject));
+        //------------------------Player attack stat setup-----------------
+        canAttack = true;
+        canBeDamaged = true;
+        basic_attack_radius = 0.23f;
+        isSpining = false;
+        // ---------------------Skill Next use time----------------
+        fire_skill_nextUseTime = 0;
+        moon_skill_nextUseTime = 0;
+        // ---------------------Ally Next use time----------------
+        shiroinu_nextUseTime = 0;
+        kuroinu_nextUseTime = 0;
+        // ---------------------Skill cooldown----------------
+        fire_skill_cooldown = 3;
+        moon_skill_cooldown = 10;
+        // ---------------------Ally cooldown----------------
+        shiroinu_cooldown = 20;
+        kuroinu_cooldown = 20;
+        JumpAttackBox = new Vector2(0.11f, 0.30f);
     }
     // Update is called once per frame
     void Update()
@@ -114,17 +120,23 @@ public class Attacks : MonoBehaviour
             {
                 StartCoroutine(MoonSkill());
             }
-            //Wind Skill
+            //Shiroinu Skill
             if (playerstat.player.skills.GetSkillList()[2].enabled)
             {
-                WindSkill();
+                Call_Shiroinu();
+            }
+            //Kuroinu Skill
+            if (playerstat.player.skills.GetSkillList()[3].enabled)
+            {
+                Call_Kuroinu();
             }
 
             //-------------------Unlock skills--------------------------------
 
+
         }
     }
-    void UnlockSkill(int index)
+    public void UnlockSkill(int index)
     {
         playerstat.player.skills.GetSkillList()[index].enabled = true;
         GameObject.Find("Skill_Cooldown_Container").GetComponent<Skill_UI>().refresh = true;
@@ -138,10 +150,9 @@ public class Attacks : MonoBehaviour
     {
         if (!Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.K) && playermovement.isGrounded)
         {
-            if (Time.time - lastAttackTime > comboDelay)
+            if (Time.time - lastAttackTime > playerstat.player.attackDelay + 0.2)
             {
                 comboIndex = 0;
-
             }
             if (Time.time > nextAttackTime)
             {
@@ -153,7 +164,7 @@ public class Attacks : MonoBehaviour
                     comboIndex = 0;
                 }
                 lastAttackTime = Time.time;
-                nextAttackTime = Time.time + 0.3f;
+                nextAttackTime = Time.time + playerstat.player.attackDelay;
             }
         }
     }
@@ -174,8 +185,12 @@ public class Attacks : MonoBehaviour
         {
             if (enemy.collider != null)
             {
-                enemy.collider.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage);
-                playerstat.SendMessage("increaseRage", 1);
+                try
+                {
+                    enemy.collider.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage);
+                }
+                catch { }
+                playerstat.increaseRage(3);
                 ShakeCamera();
                 Debug.Log(enemy.collider.GetComponent<EnemyStat>().currentHP);
             }
@@ -253,36 +268,32 @@ public class Attacks : MonoBehaviour
         if (isSpining)
         {
             playerstat.canBeHurt = false;
-
             yield return new WaitForSeconds(5.0f);
             isSpining = false;
             playerstat.canBeHurt = true;
-            UsingMoonSKill();
             yield return new WaitForSeconds(0.1f);
             animator.SetBool("Moon_Skill_Spin", false);
-            NotUsingMoonSkill();
         }
 
     }
-    IEnumerator SpinAttack()
+    public void SpinAttack()
     {
-        while (isSpining)
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 0.1f, enemies);
+        try
         {
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 0.1f, enemies);
-            try
+            foreach (Collider2D enemy in hitEnemies)
             {
-                foreach (Collider2D enemy in hitEnemies)
-                {
-                    enemy.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage / 3);
-                    ShakeCamera();
-                }
-            }
-            catch
-            {
-                Debug.Log("Null");
+                enemy.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage / 3);
+                ShakeCamera();
             }
         }
-        yield return new WaitForSeconds(0f);
+        catch
+        {
+            Debug.Log("Null");
+        }
+    }
+    void OnCollisionEnter2D(Collision2D col)
+    {
     }
 
 
@@ -296,48 +307,34 @@ public class Attacks : MonoBehaviour
     }
 
 
-    //Wind Skill
-    void WindSkill()
+    //Shiroinu Skill
+    void Call_Shiroinu()
     {
-        // if (Input.GetKeyDown(KeyCode.K) && !playermovement.isGrounded && Time.time > wind_skill_nextUseTime)
-        // {
-        //     animator.SetTrigger("Wind_skill");
-        // }
-        // if (isDiving)
-        // {
-        //     Collider2D[] hitEnemy = Physics2D.OverlapCircleAll(transform.position, slamRadius, enemies);
-        //     foreach (Collider2D enemy in hitEnemy)
-        //     {
-        //         enemy.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage);
-        //     }
-        // }
+        if (Input.GetKeyDown(KeyCode.C) && Time.time > shiroinu_nextUseTime)
+        {
+            Debug.Log("Shiroinu Called");
+            GameObject shiroinu = Instantiate(shiroinuPrefab);
+            shiroinu.transform.position = transform.position;
+            SetShiroinuCoolDown();
+        }
 
     }
-    void Diving()
+
+
+    //Kuroinu Skill
+    void Call_Kuroinu()
     {
-        isDiving = true;
-    }
-    void NotDiving()
-    {
-        isDiving = false;
-    }
-    void freezePlayerInMidAir()
-    {
-        rb.gravityScale = 0;
-    }
-    void unFreezePlayerInMidAir()
-    {
-        rb.gravityScale = 1;
+        if (Input.GetKeyDown(KeyCode.V) && Time.time > kuroinu_nextUseTime)
+        {
+            Debug.Log("Kuroinu Called");
+            GameObject kuroinu = Instantiate(kuroinuPrefab);
+            kuroinu.transform.position = transform.position;
+            SetKuroinuCoolDown();
+        }
+
+
     }
 
-    void UsingWindSKill()
-    {
-        isUsingWindSkill = true;
-    }
-    void NotUsingWindSkill()
-    {
-        isUsingWindSkill = false;
-    }
 
 
     //------------------------------------Set cooldown for each skill
@@ -346,17 +343,19 @@ public class Attacks : MonoBehaviour
         animator.ResetTrigger("Fire_skill");
         fire_skill_nextUseTime = Time.time + fire_skill_cooldown;
     }
-    void Dive()
-    {
-        rb.AddForce(new Vector2(0, diveForce));
-    }
-    void SetWindCoolDown()
-    {
-        wind_skill_nextUseTime = Time.time + wind_skill_cooldown;
-    }
+
     void SetMoonCoolDown()
     {
         moon_skill_nextUseTime = Time.time + moon_skill_cooldown;
+    }
+    void SetShiroinuCoolDown()
+    {
+        shiroinu_nextUseTime = Time.time + shiroinu_cooldown;
+    }
+
+    void SetKuroinuCoolDown()
+    {
+        kuroinu_nextUseTime = Time.time + kuroinu_cooldown;
     }
 
     //Used to damage the player
@@ -404,11 +403,6 @@ public class Attacks : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(new Vector2(transform.position.x, transform.position.y - 0.1f), 0.05f);
-        if (isDiving)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, slamRadius);
-        }
         if (isSpining)
         {
             Gizmos.color = Color.red;

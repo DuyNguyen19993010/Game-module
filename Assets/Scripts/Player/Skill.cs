@@ -8,7 +8,8 @@ public class Skill
     {
         fireSkill,
         moonSkill,
-        windSkill
+        shiroinuSkill,
+        kuroinuSkill
     };
     public SkillType type;
     public bool enabled;

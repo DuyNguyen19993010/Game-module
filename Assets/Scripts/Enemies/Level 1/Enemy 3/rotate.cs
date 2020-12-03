@@ -11,20 +11,24 @@ public class rotate : MonoBehaviour
     {
         //setting the targetplayer to our player
         targetPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        
+
     }
     void Update()
-    {   
-        //rotate the fireball direction towards the player
-        if(transform.position.x < targetPlayer.position.x)
+    {
+        try
+        {
+            if (transform.position.x < targetPlayer.position.x)
             {
                 transform.localRotation = Quaternion.Euler(0, 0, 0);
-                  
+
             }
-            else if(transform.position.x > targetPlayer.position.x)
+            else if (transform.position.x > targetPlayer.position.x)
             {
                 transform.localRotation = Quaternion.Euler(0, 180, 0);
-                  
+
             }
+        }
+        catch { }
+        //rotate the fireball direction towards the playe
     }
 }

@@ -46,7 +46,7 @@ public class DemonExplosion : MonoBehaviour
     {
         if (Vector2.Distance(transform.position, GameObject.Find("Player").transform.position) < 1)
         {
-            stats.SendMessage("decreaseHP", 100);
+            stats.SendMessage("decreaseHP", stats.damage);
         }
     }
     //-------------------------------------------------------------------------------------------------------------

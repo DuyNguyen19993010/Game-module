@@ -8,10 +8,11 @@ public class HammermanAttack : MonoBehaviour
     private Animator animator;
     private EnemyStat enemyStat;//Get enemy's stat to get their damage output
     public Transform attackPoint;   //get attackpoint
-    public float attackRange = 0.5f; //attack range of the hammerman
+    public float attackRange; //attack range of the hammerman
     public LayerMask playerlayer;
     void Start()
     {
+        attackRange = 0.4f;
         enemyStat = gameObject.GetComponent<EnemyStat>();
         movement = gameObject.GetComponent<EnemyMovement>();
         animator = gameObject.GetComponent<Animator>();
@@ -32,13 +33,16 @@ public class HammermanAttack : MonoBehaviour
         animator.ResetTrigger("lift");
         Collider2D[] playerhitted = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerlayer); //capture objects hitted that is player layer in the attackRange
         //if it is not null then hurt the player 
-        if (playerhitted != null)
+        try
         {
             foreach (Collider2D players in playerhitted)
             {
                 players.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", enemyStat.damage);
             }
         }
+        catch { }
+
+
 
 
     }

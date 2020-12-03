@@ -19,7 +19,7 @@ public class InventoryManager : MonoBehaviour
 
 
     // -------------------Skill Inventory----------------------
-    private int selectedConsumable;
+    public int selectedConsumable;
     private int selectedSkill;
     private int selectedAlly;
     private bool closed;
@@ -38,17 +38,12 @@ public class InventoryManager : MonoBehaviour
             closed = false;
             Inventory_UI.gameObject.SetActive(true);
             consumable_UI.GetComponent<Consumable_UI>().RefreshConsumableInventory();
-
+            ally_UI.GetComponent<Ally_UI>().RefreshAllyInventory();
         }
         else if (Input.GetKeyDown(KeyCode.Tab) && !closed)
         {
             Inventory_UI.gameObject.SetActive(false);
             closed = true;
-        }
-        //-------------------------Use Ally----------------------------
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            nextAlly();
         }
         // ------------------------UseConsumbale-----------------------
         if (Input.GetKeyDown(KeyCode.F))
@@ -61,18 +56,7 @@ public class InventoryManager : MonoBehaviour
             nextConsumable();
         }
     }
-    // ----------------------------Ally---------------------------
-    void nextAlly()
-    {
-        selectedAlly += 1;
-        if (selectedAlly > allyInventory.GetItemList().Count - 1)
-        {
-            selectedAlly = 0;
-        }
-        Debug.Log("Selecting :" + allyInventory.GetItemList()[selectedAlly].type);
 
-
-    }
 
 
     // ----------------------------Consumable---------------------------
@@ -86,6 +70,7 @@ public class InventoryManager : MonoBehaviour
             }
             else if (playerConsumable.GetItemList()[selectedConsumable].type.ToString() == ("crimsonAsh"))
             {
+                Debug.Log("Using Crimnson ashes");
                 StartCoroutine(useCrimsonAsh());
             }
             else if (playerConsumable.GetItemList()[selectedConsumable].type.ToString() == ("homingAsh"))
@@ -103,7 +88,7 @@ public class InventoryManager : MonoBehaviour
     IEnumerator useCrimsonAsh()
     {
         gameObject.GetComponent<PlayerStat>().canBeHurt = false;
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(5.0f);
         gameObject.GetComponent<PlayerStat>().canBeHurt = true;
     }
 
@@ -115,5 +100,13 @@ public class InventoryManager : MonoBehaviour
             selectedConsumable = 0;
         }
         Debug.Log("Selecting :" + playerConsumable.GetItemList()[selectedConsumable].type);
+    }
+
+    public void ResetConsumable()
+    {
+        foreach (Item item in playerConsumable.GetItemList())
+        {
+            item.resetAmount();
+        }
     }
 }

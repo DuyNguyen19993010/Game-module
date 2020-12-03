@@ -34,6 +34,8 @@ public class Shiroinu : MonoBehaviour
     private float disapearTime;
     private float diveTime;
     public bool explode;
+    //---------------------Decide pillar spawn time while diving-----------
+    private float nextPillarSpawnTime;
 
 
 
@@ -50,6 +52,7 @@ public class Shiroinu : MonoBehaviour
         duration = 5;
         disapear = Time.time + duration;
         rb = transform.gameObject.GetComponent<Rigidbody2D>();
+        nextPillarSpawnTime = 0;
         if (player.transform.localScale.x > 0)
         {
             rb.velocity = new Vector2(speed, 0);
@@ -61,10 +64,9 @@ public class Shiroinu : MonoBehaviour
     }
     void Update()
     {
-        if (Time.time > duration)
+        if (Time.time > disapear)
         {
             Destroy(transform.gameObject);
-
         }
         RayCastDebugger();
         if (rb.velocity.x != 0)
@@ -78,14 +80,12 @@ public class Shiroinu : MonoBehaviour
         //----------------------Detect enemy and if found , perform a dive attack------------------------
         if (!isDiving)
         {
-
-
-
             detectEnemy();
         }
         else
         {
             DealDiveDamage();
+
         }
 
         Flip();
@@ -142,8 +142,13 @@ public class Shiroinu : MonoBehaviour
     void DealDiveDamage()
     {
         float posY = (transform.position.y) - 0.02f - transform.GetComponent<SpriteRenderer>().bounds.size.y / 2;
-        GameObject spawnedPillar = Instantiate(firePillar, new Vector3(transform.position.x, posY), Quaternion.identity) as GameObject;
         rb.AddForce(new Vector2(25 * diveDirection, 0));
+        if (Time.time > nextPillarSpawnTime)
+        {
+            GameObject spawnedPillar = Instantiate(firePillar, new Vector3(transform.position.x, posY), Quaternion.identity) as GameObject;
+            nextPillarSpawnTime = Time.time + 0.19f;
+        }
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 0.2f, whoToAttack);
         foreach (Collider2D hitEnemy in hitEnemies)
         {

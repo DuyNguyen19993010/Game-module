@@ -28,23 +28,37 @@ public class PlayerStat : MonoBehaviour
     //Check if player is in parry state
     private bool isParrying;
     private bool canParry;
-
-    // Start is called before the first frame update
-    void Start()
+    //checkpoint 
+    public Vector2 checkpointPosition;
+    //Player Sprite
+    SpriteRenderer sprite;
+    [Header("Save manager")]
+    //used to save the last state of the player to respawn
+    public SaveManager saveManager;
+    [Header("Particle")]
+    public GameObject spirit;
+    public ParticleSystem spiritParticle;
+    void Awake()
     {
-        player = new Player(10, 10, 5);
+        player = new Player(20, 10, 5, 0.4f);
         canBeHurt = true;
         maxHP = player.maxHP;
         maxRage = player.maxRage;
         damage = player.damage;
-        currentHP = maxRage;
+        currentHP = player.maxHP;
         Rage = maxRage;
         isRaging = false;
         animator = gameObject.GetComponent<Animator>();
         playermovement = gameObject.GetComponent<PlayerController>();
         isParrying = false;
         canParry = true;
+        sprite = gameObject.GetComponent<SpriteRenderer>();
 
+    }
+    void OnEnable()
+    {
+        checkpointPosition = transform.position;
+        Debug.Log(checkpointPosition);
     }
     void Update()
     {
@@ -52,18 +66,24 @@ public class PlayerStat : MonoBehaviour
         if (isRaging)
         {
             Rage -= Time.deltaTime;
+            increaseHP(Time.deltaTime);
             if (Rage <= 0)
             {
+                spirit.SetActive(false);
+                spiritParticle.Stop();
                 //Deactivate Rage mode
                 Rage = 0;
                 isRaging = false;
                 damage -= 3;
+                sprite.color = Color.white;
                 Debug.Log("Ragemode deactivated");
             }
         }
         //--------------Activate Ragemode---------
         if (Input.GetKeyDown(KeyCode.R) && Rage == maxRage)
         {
+            spirit.SetActive(true);
+            spiritParticle.Play();
             //Activate Rage mode
             isRaging = true;
             damage += 3;
@@ -83,7 +103,6 @@ public class PlayerStat : MonoBehaviour
     // Modification for current real time stat
     void increaseHP(float amount)
     {
-        Debug.Log("Increase by" + amount);
         currentHP += amount;
         if (currentHP > maxHP)
         {
@@ -104,11 +123,20 @@ public class PlayerStat : MonoBehaviour
             {
                 animator.SetTrigger("hurt");
                 // Play hurt animation
-                currentHP -= damage;
+                if (!isRaging)
+                {
+                    currentHP -= damage;
+                }
+                else
+                {
+                    currentHP = currentHP - damage + 3;
+                }
                 if (currentHP <= 0)
                 {
+                    saveManager.RespawnSave();
                     currentHP = 0;
                     //PLay death animation
+                    Destroy(gameObject);
                 }
             }
         }
@@ -122,11 +150,16 @@ public class PlayerStat : MonoBehaviour
     {
         damage -= amount;
     }
-    void increaseRage(float amount)
+    public void increaseRage(float amount)
     {
-        if (!isRaging)
+        if (!isRaging && Rage <= player.maxRage)
         {
-            damage += 3;
+            Debug.Log("Rage is increased ");
+            Rage += 3;
+            if (Rage > player.maxRage)
+            {
+                Rage = player.maxRage;
+            }
         }
 
     }
@@ -195,6 +228,12 @@ public class PlayerStat : MonoBehaviour
     {
         CameraShake.Instance.ShakeCamera(0.2f, .1f);
     }
+    public void RestoreStat()
+    {
+        currentHP = maxHP;
+
+    }
+
 
 
 }

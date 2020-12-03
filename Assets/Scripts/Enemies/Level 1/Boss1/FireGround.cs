@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FireGround : MonoBehaviour
 {
-    
+
     [HideInInspector]
     public float lastingTime;
     private float disapearTime;
@@ -15,25 +15,35 @@ public class FireGround : MonoBehaviour
         lastingTime = 4;
         damage = 2;
         disapearTime = Time.time + lastingTime;
-        targetPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        try
+        {
+            targetPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        }
+        catch { }
     }
 
-   
+
     void Update()
     {
-        if(Time.time > disapearTime)
+        if (Time.time > disapearTime)
         {
             Destroy(gameObject);
         }
         //make fire disapear after 4 seconds
     }
-   
 
-    public void DamagePlayer(){
-        if(Vector2.Distance(transform.position, targetPlayer.position) < 0.3f)
+
+    public void DamagePlayer()
+    {
+
+        try
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStat>().SendMessage("decreaseHP", 1);  
+            if (Vector2.Distance(transform.position, targetPlayer.position) < 0.3f)
+            {
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStat>().SendMessage("decreaseHP", 1);
+            }
         }
+        catch { }
 
 
     }

@@ -125,7 +125,7 @@ MonoBehaviour:
   followingPlayer: 0
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   attackRangeOffSet: 0
   isMoving: 0
   speed: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   isInAttackRange: 0
   whatIsWall:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   wallDetectRadius: 0
   wallDetectHeight: 0
   ledgeDetectRadius: 0

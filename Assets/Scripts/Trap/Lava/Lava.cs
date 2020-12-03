@@ -4,21 +4,20 @@ using UnityEngine;
 
 public class Lava : MonoBehaviour
 {
-    //private PlayerStat stats;
-    // Start is called before the first frame update
-    void Start()
-    {
-        //stats = GameObject.Find("Player").GetComponent<PlayerStat>();
-    }
-
-    //while player touches the lava, kill the player
     void OnTriggerEnter2D(Collider2D other)
     {
 
         if (other.tag == ("Player") || other.tag == ("Enemy"))
         {
-            //stats.SendMessage("decreaseHP", 10);
-            Destroy(other.gameObject);
+            if (other.tag == ("Player"))
+            {
+                other.GetComponent<PlayerStat>().SendMessage("decreaseHP", 100);
+            }
+            else if (other.tag == ("Enemy"))
+            {
+                other.GetComponent<EnemyStat>().SendMessage("decreaseHP", 100);
+            }
+
         }
 
     }

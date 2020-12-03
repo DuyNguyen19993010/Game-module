@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 7165089136688143985}
   - component: {fileID: 6074161299951829867}
   - component: {fileID: 4575844121532936228}
+  - component: {fileID: 41611169750756489}
   m_Layer: 9
   m_Name: FireBoss
   m_TagString: Enemy
@@ -454,6 +455,20 @@ MonoBehaviour:
   animator: {fileID: 558832156949586406}
   distance: 0.2
   myObject: {fileID: 6319539222700551943}
+--- !u!114 &41611169750756489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6319539222700551943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c546d980b0d55e24b82ce6b869dabf40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questList: {fileID: 0}
+  doorToUnlock: 0
 --- !u!1 &6557678925299867468
 GameObject:
   m_ObjectHideFlags: 0

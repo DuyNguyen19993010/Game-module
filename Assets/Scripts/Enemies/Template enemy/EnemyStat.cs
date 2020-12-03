@@ -54,12 +54,12 @@ public class EnemyStat : MonoBehaviour
         }
         else if (enemyType == EnemyType.HammerMan)
         {
-            maxHP = 50;
+            maxHP = 40;
             damage = 4;
         }
         else if (enemyType == EnemyType.FireBoss || enemyType == EnemyType.MoonBoss)
         {
-            maxHP = 150;
+            maxHP = 80;
             damage = 3;
         }
         currentHP = maxHP;
@@ -84,13 +84,32 @@ public class EnemyStat : MonoBehaviour
         // animator.SetTrigger("hurt");
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         currentHP -= damage;
+        StartCoroutine(HurtFlash());
         if (currentHP <= 0)
         {
             //Play death animation
             // animator.SetTrigger("Die");
             gameObject.SetActive(false);
-            Invoke("Respawn", 10);
+            if (!(enemyType == EnemyType.FireBoss || enemyType == EnemyType.MoonBoss))
+            {
+                Invoke("Respawn", 10);
+            }
+            else
+            {
+                DeleteEnemy();
+            }
         }
+    }
+    //-----------------------Flash enemy when damaged------------------------
+
+    IEnumerator HurtFlash()
+    {
+        SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer>();
+        sprite.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        sprite.color = Color.white;
+
+
     }
     //used as animation event to destroy enemy object
     void DeleteEnemy()
@@ -99,6 +118,8 @@ public class EnemyStat : MonoBehaviour
     }
     void Respawn()
     {
+        SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer>();
+        sprite.color = Color.white;
         GameObject enemyClone = (GameObject)Instantiate(enemyRef);
         enemyClone.SetActive(true);
         enemyClone.transform.position = enemyPosition;

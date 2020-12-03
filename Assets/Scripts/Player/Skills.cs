@@ -8,9 +8,10 @@ public class Skills
     List<Skill> skills = new List<Skill>();
     public Skills()
     {
-        AddSkill(new Skill(Skill.SkillType.fireSkill, true));
+        AddSkill(new Skill(Skill.SkillType.fireSkill, false));
         AddSkill(new Skill(Skill.SkillType.moonSkill, false));
-        AddSkill(new Skill(Skill.SkillType.windSkill, false));
+        AddSkill(new Skill(Skill.SkillType.shiroinuSkill, false));
+        AddSkill(new Skill(Skill.SkillType.kuroinuSkill, false));
     }
     public void AddSkill(Skill skill)
     {

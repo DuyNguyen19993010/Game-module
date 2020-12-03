@@ -14,12 +14,25 @@ public class Skill_UI : MonoBehaviour
     [Header("Fire Skill")]
     public Image FireSkill;
     private float fire_skill_cooldown;
-    bool fire_skill_isCoolDown = false;
+    bool fire_skill_isCoolDown;
     //---------------------------Calculate and render the cool down for each skill----------------
     [Header("Moon Skill")]
     public Image MoonSkill;
-    private float moon_skill_cooldown;
-    bool moon_skill_isCoolDown = false;
+    public float moon_skill_cooldown;
+    bool moon_skill_isCoolDown;
+
+
+    [Header("Shiroinu")]
+    public Image Shiroinu;
+    private float shiroinu_cooldown;
+    bool shiroinu_isCoolDown;
+
+
+    [Header("Kuroinu")]
+
+    public Image Kuroinu;
+    private float kuroinu_cooldown;
+    bool kuroinu_isCoolDown;
 
 
     void Start()
@@ -30,9 +43,19 @@ public class Skill_UI : MonoBehaviour
         //-----------------Setting fire skill attribute------------------------
         fire_skill_cooldown = playerAttack.fire_skill_cooldown;
         FireSkill.fillAmount = 0;
+        fire_skill_isCoolDown = false;
         //-----------------Setting moon skill attribute------------------------
         moon_skill_cooldown = playerAttack.moon_skill_cooldown;
         MoonSkill.fillAmount = 0;
+        moon_skill_isCoolDown = false;
+        //-----------------Setting shiroinu skill attribute------------------------
+        shiroinu_cooldown = playerAttack.shiroinu_cooldown;
+        Shiroinu.fillAmount = 0;
+        shiroinu_isCoolDown = false;
+        //-----------------Setting kuroinu skill attribute------------------------
+        kuroinu_cooldown = playerAttack.kuroinu_cooldown;
+        Kuroinu.fillAmount = 0;
+        kuroinu_isCoolDown = false;
     }
     void Update()
     {
@@ -53,6 +76,8 @@ public class Skill_UI : MonoBehaviour
                 FireSkill.fillAmount = 1;
 
             }
+
+
             if (playerStat.player.skills.GetSkillList()[1].enabled)
             {
 
@@ -62,12 +87,44 @@ public class Skill_UI : MonoBehaviour
             {
                 MoonSkill.fillAmount = 1;
             }
+
+
+
+            if (playerStat.player.skills.GetSkillList()[2].enabled)
+            {
+
+                Shiroinu_skill();
+            }
+            else
+            {
+                Shiroinu.fillAmount = 1;
+            }
+
+
+
+
+            if (playerStat.player.skills.GetSkillList()[3].enabled)
+            {
+
+                Kuroinu_skill();
+            }
+            else
+            {
+                Kuroinu.fillAmount = 1;
+            }
+
+
+
+
+
         }
     }
     public void Refresh()
     {
         FireSkill.fillAmount = 0;
         MoonSkill.fillAmount = 0;
+        Shiroinu.fillAmount = 0;
+        Kuroinu.fillAmount = 0;
         refresh = false;
 
     }
@@ -104,11 +161,54 @@ public class Skill_UI : MonoBehaviour
             MoonSkill.fillAmount -= 1 / moon_skill_cooldown * Time.deltaTime;
             if (MoonSkill.fillAmount <= 0)
             {
+
                 MoonSkill.fillAmount = 0;
                 moon_skill_isCoolDown = false;
 
             }
 
         }
+    }
+    void Shiroinu_skill()
+    {
+        if (Input.GetKeyDown(KeyCode.C) && shiroinu_isCoolDown == false)
+        {
+            shiroinu_isCoolDown = true;
+            Shiroinu.fillAmount = 1;
+        }
+
+        if (shiroinu_isCoolDown)
+        {
+            Shiroinu.fillAmount -= 1 / shiroinu_cooldown * Time.deltaTime;
+            if (Shiroinu.fillAmount <= 0)
+            {
+                Shiroinu.fillAmount = 0;
+                shiroinu_isCoolDown = false;
+
+            }
+
+        }
+
+    }
+    void Kuroinu_skill()
+    {
+        if (Input.GetKeyDown(KeyCode.V) && kuroinu_isCoolDown == false)
+        {
+            kuroinu_isCoolDown = true;
+            Kuroinu.fillAmount = 1;
+        }
+
+        if (kuroinu_isCoolDown)
+        {
+            Kuroinu.fillAmount -= 1 / kuroinu_cooldown * Time.deltaTime;
+            if (Kuroinu.fillAmount <= 0)
+            {
+                Kuroinu.fillAmount = 0;
+                kuroinu_isCoolDown = false;
+
+            }
+
+        }
+
     }
 }
