@@ -46,21 +46,6 @@ AnimationClip:
     - time: 0.8
       value: {fileID: 8633573218862166484, guid: 264698dcf236595479c2a7c0190da8d4,
         type: 3}
-    - time: 0.9
-      value: {fileID: -8765144874833136265, guid: 264698dcf236595479c2a7c0190da8d4,
-        type: 3}
-    - time: 1
-      value: {fileID: -1621926499174140919, guid: 264698dcf236595479c2a7c0190da8d4,
-        type: 3}
-    - time: 1.1
-      value: {fileID: 3446098597627592997, guid: 264698dcf236595479c2a7c0190da8d4,
-        type: 3}
-    - time: 1.2
-      value: {fileID: -4913340296341782511, guid: 264698dcf236595479c2a7c0190da8d4,
-        type: 3}
-    - time: 1.3
-      value: {fileID: -2446272966502448230, guid: 264698dcf236595479c2a7c0190da8d4,
-        type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -89,17 +74,12 @@ AnimationClip:
     - {fileID: 8863969989160676953, guid: 264698dcf236595479c2a7c0190da8d4, type: 3}
     - {fileID: 7486235184381981566, guid: 264698dcf236595479c2a7c0190da8d4, type: 3}
     - {fileID: 8633573218862166484, guid: 264698dcf236595479c2a7c0190da8d4, type: 3}
-    - {fileID: -8765144874833136265, guid: 264698dcf236595479c2a7c0190da8d4, type: 3}
-    - {fileID: -1621926499174140919, guid: 264698dcf236595479c2a7c0190da8d4, type: 3}
-    - {fileID: 3446098597627592997, guid: 264698dcf236595479c2a7c0190da8d4, type: 3}
-    - {fileID: -4913340296341782511, guid: 264698dcf236595479c2a7c0190da8d4, type: 3}
-    - {fileID: -2446272966502448230, guid: 264698dcf236595479c2a7c0190da8d4, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.4
+    m_StopTime: 0.90000004
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -119,7 +99,35 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 1.3
+  - time: 0.8
+    functionName: explosionEffectLayer4Play
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.8
+    functionName: explosionEffectLayer3Play
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.8
+    functionName: explosionEffectLayer2Play
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.8
+    functionName: explosionEffectLayer1Play
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.9
     functionName: explode
     data: 
     objectReferenceParameter: {fileID: 0}

@@ -65,6 +65,9 @@ public class Attacks : MonoBehaviour
     //------------------------------------------Rage mode------------------
     private bool RageMode;
     private bool canAttack;
+    //---------------------Prticle------------------
+    [Header("Particle Effects")]
+    public GameObject comboHitEffect;
 
 
     void Start()
@@ -188,6 +191,7 @@ public class Attacks : MonoBehaviour
                 try
                 {
                     enemy.collider.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage);
+                    Instantiate(comboHitEffect, enemy.transform.position, enemy.transform.rotation);
                 }
                 catch { }
                 playerstat.increaseRage(3);
@@ -195,6 +199,35 @@ public class Attacks : MonoBehaviour
                 Debug.Log(enemy.collider.GetComponent<EnemyStat>().currentHP);
             }
         }
+    }
+
+    void ParryAttack()
+    {
+        // //Detect enemies in range of the attack
+        if (transform.localScale.x > 0)
+        {
+            comboAttackRayCast = Physics2D.RaycastAll(transform.position, Vector2.right, basic_attack_radius, enemies);
+        }
+        else
+        {
+            comboAttackRayCast = Physics2D.RaycastAll(transform.position, Vector2.left, basic_attack_radius, enemies);
+        }
+        foreach (RaycastHit2D enemy in comboAttackRayCast)
+        {
+            if (enemy.collider != null)
+            {
+                try
+                {
+                    enemy.collider.GetComponent<EnemyStat>().SendMessage("decreaseHP", 3 * playerstat.damage);
+                    Instantiate(comboHitEffect, enemy.transform.position, enemy.transform.rotation);
+                }
+                catch { }
+                playerstat.increaseRage(3);
+                ShakeCamera();
+                Debug.Log(enemy.collider.GetComponent<EnemyStat>().currentHP);
+            }
+        }
+
     }
 
     //-----------------------------Jump Attack
@@ -214,7 +247,10 @@ public class Attacks : MonoBehaviour
             foreach (Collider2D enemy in hitEnemies)
             {
                 enemy.GetComponent<EnemyStat>().SendMessage("decreaseHP", playerstat.damage);
+                Instantiate(comboHitEffect, enemy.transform.position, enemy.transform.rotation);
+                playerstat.increaseRage(3);
             }
+
         }
         catch
         {

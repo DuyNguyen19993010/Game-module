@@ -38,6 +38,8 @@ public class PlayerStat : MonoBehaviour
     [Header("Particle")]
     public GameObject spirit;
     public ParticleSystem spiritParticle;
+    public GameObject hurtEffect;
+    public GameObject parryEffect;
     void Awake()
     {
         player = new Player(20, 10, 5, 0.4f);
@@ -92,6 +94,7 @@ public class PlayerStat : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.P))
             {
+                Instantiate(parryEffect, transform.position, transform.rotation);
                 StartCoroutine(Parry());
 
             }
@@ -117,7 +120,7 @@ public class PlayerStat : MonoBehaviour
             if (isParrying)
             {
                 Debug.Log("-------------------No damage taken----------------");
-
+                animator.SetTrigger("SucessParry");
             }
             else
             {
@@ -126,10 +129,14 @@ public class PlayerStat : MonoBehaviour
                 if (!isRaging)
                 {
                     currentHP -= damage;
+                    //Player hurt effects
+                    Instantiate(hurtEffect, transform.position, transform.rotation);
                 }
                 else
                 {
                     currentHP = currentHP - damage + 3;
+                    //Player hurt effects
+                    Instantiate(hurtEffect, transform.position, transform.rotation);
                 }
                 if (currentHP <= 0)
                 {
@@ -207,10 +214,12 @@ public class PlayerStat : MonoBehaviour
         playermovement.SendMessage("FreezePlayer");
         yield return new WaitForSeconds(0.05f);
         //-----------------Start parrying duration------
+        sprite.color = Color.yellow;
         StartParry();
         yield return new WaitForSeconds(1f);
         //-----------------End parrying duration and let player parry again------
         StopParry();
+        ResetPlayerSpriteColor();
         playermovement.SendMessage("UnFreezePlayer");
         canParry = true;
     }
@@ -222,6 +231,18 @@ public class PlayerStat : MonoBehaviour
     {
         isParrying = false;
 
+    }
+    public void ResetPlayerSpriteColor()
+    {
+        sprite.color = Color.yellow;
+    }
+    public void CanNotTakeDamage()
+    {
+        canBeHurt = false;
+    }
+    public void CanTakeDamage()
+    {
+        canBeHurt = true;
     }
 
     void ShakeCamera()

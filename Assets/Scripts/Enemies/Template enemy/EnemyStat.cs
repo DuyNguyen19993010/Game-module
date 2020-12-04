@@ -59,7 +59,7 @@ public class EnemyStat : MonoBehaviour
         }
         else if (enemyType == EnemyType.FireBoss || enemyType == EnemyType.MoonBoss)
         {
-            maxHP = 80;
+            maxHP = 150;
             damage = 3;
         }
         currentHP = maxHP;

@@ -36,6 +36,11 @@ public class Shiroinu : MonoBehaviour
     public bool explode;
     //---------------------Decide pillar spawn time while diving-----------
     private float nextPillarSpawnTime;
+    [Header("Particle effects")]
+    public GameObject explosionEffectLayer1;
+    public GameObject explosionEffectLayer2;
+    public GameObject explosionEffectLayer3;
+    public GameObject explosionEffectLayer4;
 
 
 
@@ -179,6 +184,23 @@ public class Shiroinu : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, 0.2f);
 
+    }
+
+    public void explosionEffectLayer1Play()
+    {
+        Instantiate(explosionEffectLayer1, transform.position, transform.rotation);
+    }
+    public void explosionEffectLayer2Play()
+    {
+        Instantiate(explosionEffectLayer2, transform.position, transform.rotation);
+    }
+    public void explosionEffectLayer3Play()
+    {
+        Instantiate(explosionEffectLayer3, transform.position, transform.rotation);
+    }
+    public void explosionEffectLayer4Play()
+    {
+        Instantiate(explosionEffectLayer4, transform.position, transform.rotation);
     }
 
 

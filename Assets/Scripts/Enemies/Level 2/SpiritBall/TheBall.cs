@@ -34,7 +34,7 @@ public class TheBall : MonoBehaviour
             if (player != null)
             {
                 animator.SetTrigger("hitted");
-                stats.SendMessage("decreaseHP", 10);
+                stats.SendMessage("decreaseHP", 1);
                 destroyProjectile();
             }
             else

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3689312622927735558}
   m_Layer: 13
   m_Name: KuroinuNPC
-  m_TagString: NPC
+  m_TagString: Ally
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1642786399
-  m_SortingLayer: 6
+  m_SortingLayerID: 616057313
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 4723107735738678597, guid: 3dce9eb3935ecb144b437f2725a676a1,
     type: 3}
@@ -168,9 +168,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
     sentences:
-    - hi
-    - some
-    - end
+    - aldjlkwjqlkjdklqwjldkjaslkdjalsjdklasjdklasjdklasjdklasjdlwjqioehjqoieuqioeuioqudio
+    - lklakd;askdl;askdl;anc;lzxjcioayodhqwneljdnqwljdnlasdasldajslkdjwqejoqwij
+    - cjlzjcklzjclkzxjczioxcuzixcuyozuczoicuiouou
     name: Kuroinu
 --- !u!1001 &1056413163383094892
 PrefabInstance:
@@ -183,6 +183,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NPCtalkingTrigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 9026822334995155601, guid: fb3db992e7263c24bb83148836fd683a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 9026822334995155602, guid: fb3db992e7263c24bb83148836fd683a,
         type: 3}

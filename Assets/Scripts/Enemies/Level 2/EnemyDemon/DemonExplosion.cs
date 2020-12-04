@@ -10,6 +10,16 @@ public class DemonExplosion : MonoBehaviour
     private EnemyMovement movement;
     //get the playerstat
     private PlayerStat stats;
+    //------Player layer-------
+    public LayerMask playerLayer;
+    //Explode radius
+    [SerializeField]
+    private float explodeRadius;
+    [Header("Particle effects")]
+    public GameObject explosionEffectLayer1;
+    public GameObject explosionEffectLayer2;
+    public GameObject explosionEffectLayer3;
+    public GameObject explosionEffectLayer4;
 
 
 
@@ -19,7 +29,8 @@ public class DemonExplosion : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
         movement = gameObject.GetComponent<EnemyMovement>();
         stats = GameObject.Find("Player").GetComponent<PlayerStat>();
-        //----------------------------------------------------------------
+        //----------------------Setting explode radius------------------------------------------
+        explodeRadius = 0.5f;
     }
 
     void Update()
@@ -44,9 +55,15 @@ public class DemonExplosion : MonoBehaviour
     //-----------------------------this is getting called through the animation event----------------------------
     void explosionDamage()
     {
-        if (Vector2.Distance(transform.position, GameObject.Find("Player").transform.position) < 1)
+        try
         {
-            stats.SendMessage("decreaseHP", stats.damage);
+            Collider2D hitPlayer = Physics2D.OverlapCircle(transform.position, explodeRadius, playerLayer);
+            hitPlayer.gameObject.GetComponent<PlayerStat>().SendMessage("decreaseHP", stats.damage);
+        }
+        catch
+        {
+            Debug.Log("Player not found");
+
         }
     }
     //-------------------------------------------------------------------------------------------------------------
@@ -55,5 +72,25 @@ public class DemonExplosion : MonoBehaviour
     {
         Destroy(gameObject);
     }
-    //---------------------------------------------------------------------------------------------------------------------------
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explodeRadius);
+    }
+    public void explosionEffectLayer1Play()
+    {
+        Instantiate(explosionEffectLayer1, transform.position, transform.rotation);
+    }
+    public void explosionEffectLayer2Play()
+    {
+        Instantiate(explosionEffectLayer2, transform.position, transform.rotation);
+    }
+    public void explosionEffectLayer3Play()
+    {
+        Instantiate(explosionEffectLayer3, transform.position, transform.rotation);
+    }
+    public void explosionEffectLayer4Play()
+    {
+        Instantiate(explosionEffectLayer4, transform.position, transform.rotation);
+    }
 }

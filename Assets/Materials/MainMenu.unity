@@ -1577,8 +1577,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -272, y: -168}
-  m_SizeDelta: {x: 452.9275, y: 50}
+  m_AnchoredPosition: {x: 6, y: -252}
+  m_SizeDelta: {x: 1140.8145, y: 166.03778}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1472954014
 MonoBehaviour:
@@ -1600,7 +1600,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Curse blade
+  m_text: 'Miyamoto:Monogatari '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3c031f0ee180e3b4abdbdc36f822197d, type: 2}
   m_sharedMaterial: {fileID: 8229246129481855197, guid: 3c031f0ee180e3b4abdbdc36f822197d,
@@ -1610,8 +1610,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4289855232
-  m_fontColor: {r: 0, g: 1, b: 0.69433475, a: 1}
+    rgba: 4287561472
+  m_fontColor: {r: 0, g: 1, b: 0.5551176, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1634,7 +1634,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 17
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

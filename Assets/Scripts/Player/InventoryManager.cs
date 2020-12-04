@@ -23,6 +23,9 @@ public class InventoryManager : MonoBehaviour
     private int selectedSkill;
     private int selectedAlly;
     private bool closed;
+    [Header("Particle Effects")]
+    public GameObject healParticle;
+    public GameObject crimsonAshesEffect;
     void Awake()
     {
         selectedConsumable = 0;
@@ -66,6 +69,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (playerConsumable.GetItemList()[selectedConsumable].type.ToString() == "fortunePouch")
             {
+                Instantiate(healParticle, transform.position, transform.rotation);
                 gameObject.GetComponent<PlayerStat>().SendMessage("increaseHP", (playerConsumable.GetItemList()[selectedConsumable] as fortunePouch).Heal());
             }
             else if (playerConsumable.GetItemList()[selectedConsumable].type.ToString() == ("crimsonAsh"))
@@ -76,6 +80,7 @@ public class InventoryManager : MonoBehaviour
             else if (playerConsumable.GetItemList()[selectedConsumable].type.ToString() == ("homingAsh"))
             {
                 Debug.Log("Using homing ash");
+                transform.position = gameObject.GetComponent<PlayerStat>().checkpointPosition;
             }
             playerConsumable.GetItemList()[selectedConsumable].decreaseAmount();
         }
@@ -88,7 +93,11 @@ public class InventoryManager : MonoBehaviour
     IEnumerator useCrimsonAsh()
     {
         gameObject.GetComponent<PlayerStat>().canBeHurt = false;
+        Instantiate(crimsonAshesEffect, transform.position, transform.rotation);
+        SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer>();
+        sprite.color = Color.red;
         yield return new WaitForSeconds(5.0f);
+        sprite.color = Color.white;
         gameObject.GetComponent<PlayerStat>().canBeHurt = true;
     }
 
