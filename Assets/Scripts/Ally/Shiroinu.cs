@@ -160,7 +160,7 @@ public class Shiroinu : MonoBehaviour
             hitEnemy.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 * diveDirection, 0));
             if (Time.time > disapearTime)
             {
-                hitEnemy.GetComponent<EnemyStat>().decreaseHP(100.0f);
+                hitEnemy.GetComponent<EnemyStat>().decreaseHP(25.0f);
             }
         }
         if (Time.time > disapearTime)
