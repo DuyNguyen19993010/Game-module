@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class PlayerStat : MonoBehaviour
 {
     //---------------------------Player instance ------------------------------
@@ -96,7 +96,6 @@ public class PlayerStat : MonoBehaviour
             {
                 Instantiate(parryEffect, transform.position, transform.rotation);
                 StartCoroutine(Parry());
-
             }
         }
     }

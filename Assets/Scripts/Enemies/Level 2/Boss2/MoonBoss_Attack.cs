@@ -7,7 +7,7 @@ public class MoonBoss_Attack : MonoBehaviour
     //------------------used to flip boss----------
     private bool faceRight;     // check boss is facing right or not
     //------------------detect the player inside battale area--------
-    private bool Fight;
+    public bool Fight;
     //------------------Spin Attack--------------
     private bool spinMove;      //check if allow to spin
     private float originalPos;  //initial position x of the boss
