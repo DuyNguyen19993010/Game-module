@@ -16,7 +16,6 @@ public class PlayerDeath : MonoBehaviour
         else
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-
         }
 
 
