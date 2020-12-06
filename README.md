@@ -6,10 +6,15 @@
 
 #Evil Wizard by Luiz Melo on Unity store
 
+#Warped Caves by Ansimuz on Unisty store
+
 #Medieval Fantasy Character Pack 2 by OcO
 
-#Every other artwork is made by Duy Huu Nguyen in the team
+#Monsters_Creatures_Fantasy by Luis Melo on Unity store
 
+#GothicVania Church Pack by Ansimuz on Unity store
+
+#Every other artwork is made by Duy Huu Nguyen in the team
 
 #-----------------Sound--------------------------
 
