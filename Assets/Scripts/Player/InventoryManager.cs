@@ -69,17 +69,18 @@ public class InventoryManager : MonoBehaviour
         {
             if (playerConsumable.GetItemList()[selectedConsumable].type.ToString() == "fortunePouch")
             {
+
                 Instantiate(healParticle, transform.position, transform.rotation);
                 gameObject.GetComponent<PlayerStat>().SendMessage("increaseHP", (playerConsumable.GetItemList()[selectedConsumable] as fortunePouch).Heal());
             }
             else if (playerConsumable.GetItemList()[selectedConsumable].type.ToString() == ("crimsonAsh"))
             {
-                Debug.Log("Using Crimnson ashes");
+                //Make player can not be hurt by anything
                 StartCoroutine(useCrimsonAsh());
             }
             else if (playerConsumable.GetItemList()[selectedConsumable].type.ToString() == ("homingAsh"))
             {
-                Debug.Log("Using homing ash");
+                //Teleport player
                 transform.position = gameObject.GetComponent<PlayerStat>().checkpointPosition;
             }
             playerConsumable.GetItemList()[selectedConsumable].decreaseAmount();
@@ -110,7 +111,7 @@ public class InventoryManager : MonoBehaviour
         }
         Debug.Log("Selecting :" + playerConsumable.GetItemList()[selectedConsumable].type);
     }
-
+    // Reset consumable amount to max
     public void ResetConsumable()
     {
         foreach (Item item in playerConsumable.GetItemList())

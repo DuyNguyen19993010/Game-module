@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class RespawnMenu : MonoBehaviour
 {
+    void Awake()
+    {
+        Time.timeScale = 1;
+    }
     public void Respawn()
     {
         PlayerPrefs.SetInt("value", 2);

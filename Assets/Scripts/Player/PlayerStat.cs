@@ -119,7 +119,7 @@ public class PlayerStat : MonoBehaviour
         {
             if (isParrying)
             {
-                Debug.Log("-------------------No damage taken----------------");
+                //trigger successparry animation
                 animator.SetTrigger("SucessParry");
             }
             else
@@ -216,7 +216,7 @@ public class PlayerStat : MonoBehaviour
         //-----------------Start parrying duration------
         sprite.color = Color.yellow;
         StartParry();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         //-----------------End parrying duration and let player parry again------
         StopParry();
         ResetPlayerSpriteColor();

@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    void Awake()
+    {
+        Time.timeScale = 1;
+    }
     public void StartGame()
     {
         PlayerPrefs.SetInt("value", 0);

@@ -411,7 +411,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 183.34229, y: -170.76231}
+  m_AnchoredPosition: {x: 410, y: -286}
   m_SizeDelta: {x: 366.68457, y: 341.52463}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &170762005
@@ -432,7 +432,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_StartCorner: 0
+  m_StartCorner: 1
   m_StartAxis: 0
   m_CellSize: {x: 256, y: 64}
   m_Spacing: {x: 0, y: 28.8}
@@ -890,7 +890,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4eeaf2e7a7c45f5448018e4c6e036b04, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 85da29e37a8c8be45892b3b680ce396f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1577,7 +1577,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0031543, y: -170.76}
+  m_AnchoredPosition: {x: 8, y: 133}
   m_SizeDelta: {x: 800.00635, y: 108.473114}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1472954014
@@ -1600,18 +1600,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Miyamoto:Monogatari '
+  m_text: 'Miyamoto: Monogatari '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3c031f0ee180e3b4abdbdc36f822197d, type: 2}
-  m_sharedMaterial: {fileID: 8229246129481855197, guid: 3c031f0ee180e3b4abdbdc36f822197d,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4287561472
-  m_fontColor: {r: 0, g: 1, b: 0.5551176, a: 1}
+    rgba: 4294935808
+  m_fontColor: {r: 0, g: 0.5231595, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1628,13 +1627,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55.2
-  m_fontSizeBase: 55.2
+  m_fontSize: 78.6
+  m_fontSizeBase: 78.6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 17
+  m_fontStyle: 19
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

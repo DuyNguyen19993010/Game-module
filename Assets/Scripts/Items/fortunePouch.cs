@@ -8,7 +8,7 @@ public class fortunePouch : Item
     public fortunePouch()
     {
         this.type = ItemType.fortunePouch;
-        this.heal = 1;
+        this.heal = 3;
         this.max = 2;
         this.amount = this.max;
     }
